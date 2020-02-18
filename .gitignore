@@ -1,3 +1,7 @@
 __pycache__/
 *.py[cod]
 *.sw[po]
+
+# Database stuff
+migrations/
+*.db

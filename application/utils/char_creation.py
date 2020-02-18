@@ -111,7 +111,7 @@ cha_table = {
 }
 
 
-class CreateCharacter():
+class BaseMods():
     def __init__(self):
         pass
 
@@ -147,3 +147,113 @@ class CreateCharacter():
 
     def get_charisma_mods(self, score):
         return ChaMods(*cha_table[score])
+
+
+class RaceMods():
+    @staticmethod
+    def dwarf(player):
+        player.constitution += 1
+        player.charisma -= 1
+        player.saving_throws["poison"] += int(player.constitution//3.5)
+        player.racial_abilities = {
+            "infravision": 60,
+            "movement": 90,  # ft; kept as int for future bonus/penalty calculation?
+            "special": {
+                "detect slopes or grades": 0.75,
+                "detect new construction": 0.75,
+                "detect sliding or shifting rooms or walls": 0.66,
+                "detect stonework traps": 0.50,
+                "determine depth underground": 0.50
+            }
+        }
+        player.languages = [
+            "dwarfish", "gnomish", "goblin", "kobold", "orcish", "common"
+        ]
+        player.max_addl_langs = 2
+
+    @staticmethod
+    def elf(player):
+        player.dexterity += 1
+        player.constitution -= 1
+        player.racial_abilities = {
+            "infravision": 60,
+            "movement": 120,
+            "pulled bow": "+1 to hit",
+            "longsword and short sword": "+1 to hit",
+            "secret doors": "1 in 6 chance to notice secret doors when passing within\
+             10 ft, 2 in 6 chance to discover secret doors when searching, and 3 in 6 chance\
+             to discover concealed doors when searching.",
+            "surprise": "4 in 6 chance to surprise when travelling in non-metal armour and alone,\
+             or more than 90 ft in advance of others, or with a party entirely consisting of elves\
+             and/or halflings. If a door must be opened (or some similar task), the chance of\
+             surprise drops to 2 in 6."
+        }
+        player.languages = [
+            "common", "elven", "gnoll", "gnomish", "goblin", "halfling", "hobgoblin", "orcish"
+        ]
+        if player.intelligence >= 16:
+            player.max_addl_langs += player.intelligence - 15
+
+    @staticmethod
+    def gnome(player):
+        con_mod = int(player.constitution//3.5)
+        player.saving_throws.update({"spells": con_mod, "poison": con_mod})
+        player.racial_abilities = {
+            "infravision": 60,
+            "movement": 90,
+            "special": {
+                "detect slopes or grades": 0.75,
+                "detect new construction": 0.75,
+                "detect sliding or shifting rooms or walls": 0.66,
+                "detect stonework traps": 0.50,
+                "determine depth underground": 0.50
+            }
+        }
+        player.languages = [
+            "common", "dwarfish", "gnomish", "goblin", "halfling", "kobold", "burrowing animals"
+        ]
+        player.max_addl_langs = 2
+
+    @staticmethod
+    def halfelf(player):
+        player.racial_abilities = {
+            "infravision": 60,
+            "movement": 120,
+            "secret doors": "When searching, a half-elf character can detect secret doors on a\
+             2 in 6 and concealed doors on a 3 in 6. When passing within 10ft of a concealed door,\
+             a half-elf will notice it on a 1 in 6.",
+        }
+        player.languages = [
+            "common", "elven", "gnoll", "gnomish", "goblin", "halfling", "hobgoblin", "orcish"
+        ]
+
+    @staticmethod
+    def halfling(player):
+        player.strength -= 1
+        player.dexterity += 1
+        con_mod = int(player.constitution//3.5)
+        player.saving_throws.update({
+            "aimed magic items": con_mod,
+            "spells": con_mod,
+            "poison": con_mod
+        })
+        player.racial_abilities = {
+            "infravision": 60,
+            "movement": 90,
+            "surprise": "4 in 6 chance to surprise when travelling in non-metal armour and alone,\
+             or more than 90 ft in advance of others, or with a party entirely consisting of elves\
+             and/or halflings. If a door must be opened (or some similar task), the chance of\
+             surprise drops to 2 in 6."
+        }
+
+    @staticmethod
+    def halforc(player):
+        player.strength += 1
+        player.constitution += 1
+        player.charisma -= 2
+        player.languages = ["common", "orcish"]
+        player.max_addl_langs = 2
+
+    @staticmethod
+    def human(player):
+        pass

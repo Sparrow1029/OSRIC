@@ -40,10 +40,14 @@ class Player():
         self.intelligence = scores["int"]
         self.charisma = scores["cha"]
 
-        self.max_addl_langs = base_mod.get_max_addl_langs(self.intelligence)
-        self.mental_save = base_mod.get_mental_save(self.wisdom)
+        self.max_addl_langs = 0
 
+        self.mental_save = base_mod.get_mental_save(self.wisdom)
         add_race_mods[self.race.lower()](self)
+        check = base_mod.get_max_addl_langs(self.intelligence)
+        if check < self.max_addl_langs:
+            self.max_addl_langs = check
+
 
     def __repr__(self):
         string = f"""
@@ -65,7 +69,7 @@ scores = {
     "str": 12,
     "dex": 17,
     "con": 13,
-    "int": 11,
+    "int": 16,
     "wis": 10,
     "cha": 8
 }

@@ -7,7 +7,16 @@ class Player(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     player_name = db.Column(db.String(64), index=True)
     char_name = db.Column(db.String(64))
-    strength = db.Column(db.Integer)
+    race = db.Column(db.String)
+    class = db.Column(db.String
+    exp = db.Column(db.Integer)
+    lvl = db.Column(db.Integer)
+    str = db.Column(db.Integer)
+    dex = db.Column(db.Integer)
+    con = db.Column(db.Integer)
+    int = db.Column(db.Integer)
+    wis = db.Column(db.Integer)
+    cha = db.Column(db.Integer)
 
     def __repr__(self):
         string = f"Player: {self.player_name}\t\tCharacter: {self.char_name}\nStr: {self.strength}"

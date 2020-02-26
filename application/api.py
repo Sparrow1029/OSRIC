@@ -1,6 +1,6 @@
 from main import app, mongo, api
 from flask import request, jsonify
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
 from bson.json_util import _json_convert
 from bson.objectid import ObjectId
 
@@ -22,14 +22,38 @@ class Equipment(Resource):
         if not category:
             return jsonify("Please select a category")
         if _id and not name and ObjectId.is_valid(_id):
-            return _json_convert(db[category].find({'_id': ObjectId(_id)})), 404
+            return _json_convert(db[category].find({'_id': ObjectId(_id)})), 200
         if name:
-            return _json_convert(db[category].find({'name': name})), 404
+            return _json_convert(db[category].find({'name': name})), 200
 
-        return _json_convert(db[category].find()), 404
+        return _json_convert(db[category].find()), 200
+
+
+class CharacterForm(Resource):
+    def __init__(self):
+        fields = [
+            "player", "char_name", "race", "class",
+        ]
+        stats = [
+            "str", "dex", "con", "int", "wis", "cha",
+        ]
+        self.parser = reqparse.RequestParser()
+        for field in fields:
+            self.parser.add_argument(field, type=str, required=True)
+        for stat in stats:
+            self.parser.add_argument(stat, type=int, required=True)
+
+
+    def post(self):
+        # db = mongo.cx["players"]
+        args = self.parser.parse_args()
+        li = ""
+        for k, v in args.items():
+            li += f"<li>{k}: {v}</li>"
+        return f"<html><body><ul>{li}</ul></body></html>"
 
 
 api.add_resource(Equipment, '/equipment')
-
+api.add_resource(CharacterForm, '/character')
 
 app.run()

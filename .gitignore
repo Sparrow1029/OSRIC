@@ -5,3 +5,7 @@ __pycache__/
 # Database stuff
 migrations/
 *.db
+
+# Temp/old/dead files
+*.BAK
+*.bak

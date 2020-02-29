@@ -37,8 +37,9 @@ class Assassin():
     }
 
 
-a = Assassin
-for i in [3, 7, 12, 14]:
-    for rng in a.saving_throws:
-        if i in rng:
-            print(a.saving_throws[rng])
+if __name__ == "__main__":
+    a = Assassin
+    for i in [3, 7, 12, 14]:
+        for rng in a.saving_throws:
+            if i in rng:
+                print(a.saving_throws[rng])

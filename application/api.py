@@ -1,8 +1,13 @@
 from main import app, mongo, api
 from flask import request, jsonify
 from flask_restful import Resource, reqparse
+
 from bson.json_util import _json_convert
 from bson.objectid import ObjectId
+
+from classes import *
+from player import Player
+from utils.char_creation import BaseMods, RaceMods
 
 
 @app.route('/', methods=["GET"])
@@ -31,26 +36,30 @@ class Equipment(Resource):
 
 class CharacterForm(Resource):
     def __init__(self):
-        fields = [
-            "player", "char_name", "race", "class",
+        self.fields = [
+            "player", "char_name", "race", "class", "alignment",
         ]
-        stats = [
+        self.stats = [
             "str", "dex", "con", "int", "wis", "cha",
         ]
         self.parser = reqparse.RequestParser()
-        for field in fields:
+        for field in self.fields:
             self.parser.add_argument(field, type=str, required=True)
-        for stat in stats:
+        for stat in self.stats:
             self.parser.add_argument(stat, type=int, required=True)
-
 
     def post(self):
         # db = mongo.cx["players"]
         args = self.parser.parse_args()
-        li = ""
-        for k, v in args.items():
-            li += f"<li>{k}: {v}</li>"
-        return f"<html><body><ul>{li}</ul></body></html>"
+        new_player = Player(
+            scores={stat: args[stat] for stat in self.stats},
+            char_name=args["char_name"],
+            player_name=args["player"],
+            class_type=args["class"],
+            alignment=args["alignment"],
+            race=args["race"],
+        )
+        return new_player.__repr__()
 
 
 api.add_resource(Equipment, '/equipment')

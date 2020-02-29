@@ -32,6 +32,7 @@ class Player():
         self.dex_mods = base_mod.get_dex_mods(scores["dex"])
         self.con_mods = base_mod.get_const_mods(scores["con"], self.class_type)
         self.cha_mods = base_mod.get_charisma_mods(scores["cha"])
+        self.saving_throws = dict()
 
         self.strength = scores["str"]
         self.dexterity = scores["dex"]
@@ -65,14 +66,15 @@ class Player():
         return string
 
 
-scores = {
-    "str": 12,
-    "dex": 17,
-    "con": 13,
-    "int": 16,
-    "wis": 10,
-    "cha": 8
-}
+if __name__ == "__main__":
+    scores = {
+        "str": 12,
+        "dex": 17,
+        "con": 13,
+        "int": 16,
+        "wis": 10,
+        "cha": 8
+    }
 
-p = Player(scores, 'Haldir', 'Alex', 'Thief','CN', 'Half-elf')
-print(p)
+    p = Player(scores, 'Haldir', 'Alex', 'Thief','CN', 'Half-elf')
+    print(p)

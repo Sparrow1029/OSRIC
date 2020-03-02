@@ -8,7 +8,7 @@ class Player(db.Model):
     player_name = db.Column(db.String(64), index=True)
     char_name = db.Column(db.String(64))
     race = db.Column(db.String)
-    class = db.Column(db.String
+    class_ = db.Column(db.String)
     exp = db.Column(db.Integer)
     lvl = db.Column(db.Integer)
     str = db.Column(db.Integer)

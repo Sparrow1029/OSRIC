@@ -1,5 +1,5 @@
-# from database import init_db
-from mongoengine import connect
+from database import init_db
+# from mongoengine import connect
 from flask import Flask
 from flask_graphql import GraphQLView
 from schema import schema
@@ -15,6 +15,5 @@ app.add_url_rule(
 
 
 if __name__ == "__main__":
-    # init_db()
-    connect("dnd-graphene-mongo-test", host="mongomock://localhost", alias="default")
+    init_db()
     app.run()

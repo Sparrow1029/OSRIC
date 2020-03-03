@@ -1,7 +1,5 @@
 import graphene
-# from graphene.relay import Node
-# from graphene_mongo import MongoengineConnectionField, MongoengineObjectType
-from graphene_mongo import MongoengineObjectType  # MongoengineConnectionField
+from graphene_mongo import MongoengineObjectType
 
 from models import Character as CharacterModel
 from models import Modifiers as ModifiersModel
@@ -12,6 +10,12 @@ from models import Race as RaceModel
 
 from models import Campaign as CampaignModel
 from models import Player as PlayerModel
+
+from auth import AuthMutation, RefreshMutation
+from flask_graphql_auth import (
+    mutation_jwt_refresh_token_required,
+    mutation_jwt_required
+)
 
 
 class Campaign(MongoengineObjectType):
@@ -150,7 +154,7 @@ class Query(graphene.ObjectType):
     all_characters = graphene.List(Character)
     all_players = graphene.List(Player)
     find_character = graphene.Field(Character, name=(graphene.String(required=True)))
-    find_race = graphene.Field(Character, name=(graphene.String(required=True)))
+    find_race = graphene.Field(Race, name=(graphene.String(required=True)))
     find_class = graphene.Field(Class, name=(graphene.String(required=True)))
 
     def resolve_all_characters(self, info):
@@ -173,6 +177,8 @@ class Mutations(graphene.ObjectType):
     create_character = CreateCharacter.Field(description="Make a new character")
     register_player = RegisterPlayer.Field(description="Register a new user")
     check_password = CheckPassword.Field(description="Check user password (bCrypt)")
+    create_auth_token = AuthMutation.Field(description="Create JWT auth token")
+    refresh_token = RefreshMutation.Field(description="Assign refresh token")
 
 
 schema = graphene.Schema(

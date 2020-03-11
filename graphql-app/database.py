@@ -1,6 +1,14 @@
 from mongoengine import connect
 
-from models import Character, Stats, Race, Class, Ability, Modifiers
+from models import (
+    Character,
+    Player,
+    Stats,
+    Race,
+    Class,
+    Ability,
+    Modifiers,
+)
 
 connect("dnd-graphene-mongo-test", host="mongomock://localhost", alias="default")
 
@@ -41,10 +49,10 @@ def init_db():
     dude = Character(
         name="Dude",
         stats=Stats(
-            str_=12,
+            str=12,
             dex=12,
             con=13,
-            int_=15,
+            int=15,
             wis=12,
             cha=14,
         ),
@@ -53,13 +61,13 @@ def init_db():
         cur_campaign="Darkness comes",
         align="neutral_evil",
     )
-    guyette = Character(
-        name="Guyette",
+    dudette = Character(
+        name="Dudette",
         stats=Stats(
-            str_=12,
+            str=12,
             dex=13,
             con=10,
-            int_=13,
+            int=13,
             wis=15,
             cha=17,
         ),
@@ -69,4 +77,20 @@ def init_db():
         align="neutral_neutral"
     )
     dude.save()
-    guyette.save()
+    dudette.save()
+
+    # Create some damn players
+    alex = Player(
+        username="sparrow",
+        password=Player.set_password("password"),
+        characters=[dude],
+        real_name="Alex"
+    )
+    nikki = Player(
+        username="pillowprincess",
+        password=Player.set_password("dollybear"),
+        characters=[dudette],
+        real_name="Nikki"
+    )
+    alex.save()
+    nikki.save()

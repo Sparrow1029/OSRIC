@@ -13,10 +13,10 @@ from flask_bcrypt import generate_password_hash, check_password_hash
 
 class Stats(EmbeddedDocument):
 
-    str_ = IntField(db_field="str", required=True)
+    str = IntField(required=True)
     dex = IntField(required=True)
     con = IntField(required=True)
-    int_ = IntField(db_field="int", required=True)
+    int = IntField(required=True)
     wis = IntField(required=True)
     cha = IntField(required=True)
 

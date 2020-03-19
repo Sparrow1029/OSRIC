@@ -1,0 +1,114 @@
+:root {
+	--primary: 0, 0, 0;
+	--secondary: 100, 201, 99;
+	--danger: 234, 66, 66;
+	--white: 244, 244, 244;
+	/*--secondary: #33cc33;*/
+	/*--danger: #e60000;*/
+	/*--white: #fafafa;*/
+}
+
+/* Remove inner dotted line from button text on click */
+button::-moz-focus-inner {
+  border: 0;
+}
+
+/* hopefully this will do it for other browsers */
+*:focus {
+  outline: 0 !important;
+}
+
+/* Button sizes */
+.btn-small {
+	margin: 8px 12px;
+	padding: 5px 8px;
+	font-size: .8em;
+	border-radius: 5px;
+	min-width: 60px;
+}
+
+.btn-medium {
+	margin: 10px 20px;
+	padding: 10px 15px;
+	border-radius: 10px;
+	min-width: 100px;
+}
+.btn-large {
+	margin: 15px 28px;
+	padding: 13px 18px;
+	border-radius: 10px;
+	min-width: 150px;
+}
+
+/* Colors */
+.btn-primary {
+	color: rgba(var(--primary), 1);
+	background-color: rgba(var(--primary), 1);
+}
+
+.btn-secondary {
+	color: rgba(var(--secondary), 1);
+	background-color: rgba(var(--secondary), 1);
+}
+
+.btn-danger {
+	color: rgba(var(--danger), 1);
+	background-color: rgba(var(--danger), 1);
+}
+
+
+/* Filled & Outlined properties */
+.btn-filled {
+	color: rgba(var(--white), 1);
+	font-family: "Roboto", sans-serif;
+	font-weight: 400;
+	border: none;
+	cursor: pointer;
+	transition: 0.2s ease;
+}
+
+.btn-filled.btn-primary:hover {
+	background-color: rgba(var(--primary), 0.5);
+	color: rgba(var(--primary), 1)
+}
+
+.btn-filled.btn-secondary:hover {
+	background-color: rgba(var(--secondary), 0.7);
+	color: rgba(var(--primary), 1)
+}
+
+.btn-filled.btn-danger:hover {
+	background-color: rgba(var(--danger), 0.7);
+	color: rgba(var(--primary), 1)
+}
+
+.btn-outline {
+	font-family: "Roboto", sans-serif;
+	font-weight: 400;
+	border: 2px solid currentColor;
+	cursor: pointer;
+	background-color: transparent;
+	transition: 0.2s ease;
+}
+
+.btn-outline.btn-primary:hover {
+	background-color: rgba(var(--primary), .3);
+}
+
+.btn-outline.btn-secondary:hover {
+	background-color: rgba(var(--secondary), .3);
+}
+
+.btn-outline.btn-danger:hover {
+	background-color: rgba(var(--danger), .3);
+}
+
+/* Disabled */
+.disabled {
+  color: rgba(var(--primary), 0.8);
+  border: none;
+  background-color: gray !important;
+  opacity: 0.7;
+  cursor: default;
+  transition: none !important;
+}

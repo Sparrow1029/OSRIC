@@ -71,7 +71,10 @@ for csv_file in class_files:
                 for i in range(levels[0], levels[1]+1):
                     class_document[class_name][embedded_name][str(i)] = dict(zip(headers, row[2:]))
             elif embedded_name == "restrictions":
-                row[-3] = row[-3].split()
+                # row[-3] = row[-3].split()
+                # create lists for weapons_permitted, shield, armor, alignment
+                for i in range(-3, -7, -1):
+                    row[i] = row[i].split()
                 class_document[class_name][embedded_name] = dict(zip(headers, row[1:]))
 
 pprint(class_document)

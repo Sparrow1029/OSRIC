@@ -1,6 +1,6 @@
 from graphene_mongo import MongoengineObjectType
 from flask_jwt_extended import (
-    get_jwt_claims
+    get_jwt_claims, jwt_required
 )
 
 from models import (
@@ -82,6 +82,7 @@ class Query(ObjectType):
     find_class = Field(Class, name=(String(required=True)))
     # get_claims = Field(Claims)
 
+    @jwt_required
     def resolve_all_characters(self, info):
         return list(CharacterModel.objects.all())
 

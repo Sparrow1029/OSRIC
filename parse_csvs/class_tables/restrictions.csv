@@ -1,13 +1,10 @@
 class,min_str,min_dex,min_con,min_int,min_wis,min_cha,hit_die,alignment,armor,shield,weapons_permitted,proficiencies,penalty_to_hit
-assassin,12,12,6,11,6,0,d6,evil,leather studded,any,"any
-",3 +1 every 4 lvl,-3
-cleric,6,3,6,6,9,6,d8,any,any,any,club flail hammer mace oil staff,2 + 1 every 3 lvl,-3
-druid,6,6,6,6,12,15,d8,neutral,leather,wooden,club dagger dart hammer oil scimitar sling spear staff,2 + 1 every 3 lvl,-4
-fighter,9,6,7,3,6,6,d10,any,any,any,"any
-",4 + 1 every 2 lvl,-2
-illusionist,6,16,0,6,6,6,d4,any,none,none,dagger dart oil staff,1 + 1 every 5 lvl,-5
-magic_user,3,6,6,9,6,6,d4,any,none,none,dagger dart oil staff,1 + 1 every 5 lvl,-5
-paladin,12,6,9,9,13,17,d10,lawful_good,any,any,"any
-",3 + 1 every 2 lvl,-2
-thief,6,9,6,0,0,6,d6,neutral_or_evil,leather studded,none,club dagger dart oil sling single_handed_swords,,
-ranger,13,6,14,13,14,6,d8,good,any,any,any,3 + 1 every 2 lvl,-2
+assassin,12,12,6,11,6,0,d6,le ne ce,leather studded,any,any,3 +1 every 4 lvl,-3
+cleric,6,3,6,6,9,6,d8,lg ng cg ln nn cn le ne ce,any,any,club flail hammer mace oil staff,2 + 1 every 3 lvl,-3
+druid,6,6,6,6,12,15,d8,ln nn cn,leather,wooden,club dagger dart hammer oil scimitar sling spear staff,2 + 1 every 3 lvl,-4
+fighter,9,6,7,3,6,6,d10,lg ng cg ln nn cn le ne ce,any,any,any,4 + 1 every 2 lvl,-2
+illusionist,6,16,0,6,6,6,d4,lg ng cg ln nn cn le ne ce,none,none,dagger dart oil staff,1 + 1 every 5 lvl,-5
+magic_user,3,6,6,9,6,6,d4,lg ng cg ln nn cn le ne ce,none,none,dagger dart oil staff,1 + 1 every 5 lvl,-5
+paladin,12,6,9,9,13,17,d10,lg,any,any,any,3 + 1 every 2 lvl,-2
+thief,6,9,6,0,0,6,d6,ln nn cn le ne ce,leather studded,none,club dagger dart oil sling single_handed_swords,2 +1 every 4 lvl,-3
+ranger,13,6,14,13,14,6,d8,lg ng cg,any,any,any,3 + 1 every 2 lvl,-2

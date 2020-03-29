@@ -5,7 +5,8 @@ from mongoengine.fields import (
     ReferenceField,
     # ObjectIdField,
     StringField,
-    ListField,
+    FloatField,
+    EmailField, ListField,
     IntField,
 )
 from flask_bcrypt import generate_password_hash, check_password_hash
@@ -62,10 +63,53 @@ class Race(Document):
 
 class Class(Document):
 
-    meta = {"collection": "class"}
+    meta = {"collection": "classes"}
     name = StringField(required=True)
     mods = EmbeddedDocumentField(ClassMods)
     abilities = EmbeddedDocumentListField(Ability)
+
+
+class Item(Document):
+
+    meta = {"collection": "items"}
+    name = StringField(required=True)
+    weight = FloatField()
+    cost = FloatField()
+    special = StringField()
+
+
+class Weapon(Document):
+
+    meta = {"collection": "weapons"}
+    name = StringField(required=True)
+    type = StringField(required=True)  # missile or melee or magic?
+    dmg_sm_md = StringField()
+    dmg_lg = StringField()
+    encumbrance = FloatField()
+    cost = FloatField()
+    magic = String()
+
+    # missile weapons only
+    rate_of_fire = FloatField()
+    rng = IntField()
+
+
+class Armor(Document):
+
+    type = StringField()
+    encumbrance = IntField()
+    max_move = IntField()
+    ac = IntField()
+    cost = FloatField()
+
+
+class Inventory(EmbeddedDocument):
+
+    gold = FloatField()
+    loot = EmbeddedDocumentListField(Item)
+    armor = EmbeddedDocumentListField(Armor)
+    weapons = EmbeddedDocumentListField(Weapon)
+    equipment = EmbeddedDocumentListField(Item)
 
 
 class Character(Document):
@@ -73,10 +117,11 @@ class Character(Document):
     meta = {"collection": "character"}
     name = StringField(max_length=32, required=True)
     stats = EmbeddedDocumentField(Stats, required=True)
-    class_ = ReferenceField(Class)
+    clss = ReferenceField(Class)
     race = ReferenceField(Race)
     cur_campaign = StringField()
     align = StringField(required=True)
+    inventory = EmbeddedDocumentField(Inventory)
 
 
 class Player(Document):
@@ -84,6 +129,7 @@ class Player(Document):
     meta = {"collection": "player"}
     username = StringField(required=True, unique=True)
     password = StringField(required=True, min_length=8)
+    email = EmailField(unique=True)
     characters = ListField(ReferenceField(Character))
     real_name = StringField()
 
@@ -101,3 +147,17 @@ class Campaign(Document):
     owner = ReferenceField(Player, required=True)
     title = StringField(required=True)
     characters = ListField(ReferenceField(Character))
+
+
+class Spell(Document):
+
+    meta = {"collection": "spells"}
+    clss = ReferenceField(Class)
+    spell_name = StringField(required=True, unique=True)
+    lvl = IntField()
+    rng = StringField()
+    duration = StringField()
+    aoe = StringField()
+    components = ListField()
+    saving_throw = StringField(default='None')
+    description = StringField()

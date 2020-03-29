@@ -72,17 +72,18 @@ class Character(MongoengineObjectType):
 
 # class Claims(ObjectType):
 #     claims = String()
+def resolve_all_characters(self, info):
+    return list(CharacterModel.objects.all())
 
 
 class Query(ObjectType):
-    all_characters = List(Character)
+    all_characters = List(Character, resolver=resolve_all_characters)
     all_players = List(Player)
     find_character = Field(Character, name=(String(required=True)))
     find_race = Field(Race, name=(String(required=True)))
     find_class = Field(Class, name=(String(required=True)))
     # get_claims = Field(Claims)
-
-    @jwt_required
+    # @jwt_required
     def resolve_all_characters(self, info):
         return list(CharacterModel.objects.all())
 

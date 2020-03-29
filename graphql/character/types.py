@@ -4,8 +4,9 @@ from graphene_mongo import MongoengineObjectType
 from mongoengine import Document, EmbeddedDocument
 from mongoengine.fields import (
     StringField, EmbeddedDocumentField, ReferenceField, ListField,
-    EmbeddedDocumentListField
+    EmbeddedDocumentListField, IntField
 )
+from dndclass.types import Class
 
 
 class Stats(EmbeddedDocument):

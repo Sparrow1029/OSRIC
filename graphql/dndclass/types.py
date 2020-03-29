@@ -45,3 +45,11 @@ class ClassMods(EmbeddedDocument):
     weapons = ListField()
     proficiencies = StringField()
     penalty_to_hit = IntField()
+
+
+class Class(Document):
+
+    meta = {"collection": "class"}
+    name = StringField(required=True)
+    mods = EmbeddedDocumentField(ClassMods)
+    abilities = EmbeddedDocumentListField(Ability)

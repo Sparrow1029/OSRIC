@@ -8,25 +8,19 @@ from models import (
     Stats as StatsModel,
     Class as ClassModel,
     Race as RaceModel,
+    Weapon as WeaponModel,
+    Item as ItemModel,
+    Spell as SpellModel,
 )
 
 from queries import (
-    Campaign,
-    Player,
-    Character,
-    Modifiers,
-    Ability,
-    Stats,
+    Campaign, Player, Character, Modifiers, Ability, Stats, Weapon,
+    Armor, Item, Spell
+
 )
 from graphene import (
-    InputObjectType, ObjectType,
-    Mutation,
-    Boolean,
-    Field,
-    String,
-    List,
-    Int,
-    ID,
+    InputObjectType, ObjectType, Mutation, Boolean, Field, String,
+    List, Int, Float, ID,
 )
 
 # from auth import AuthMutation, RefreshMutation  # , GetClaims
@@ -34,6 +28,40 @@ from graphene import (
 #     mutation_jwt_refresh_token_required,
 #     mutation_jwt_required
 # )
+
+
+class AbilityInput(InputObjectType):
+    name = String(max_length=32, required=True)
+    description = String(required=True)
+
+
+class ItemInput(InputObjectType):
+    name = String(required=True)
+    weight = Float()
+    cost = Float()
+    special = String()
+
+
+class WeaponInput(InputObjectType):
+    name = String(required=True)
+    type = String(required=True)
+    dmg_sm_md = String(required=True)
+    dmg_lg = String(required=True)
+    encumbrance = Float(required=True)
+    rate_of_fire = Float()
+    rng = Int()
+
+
+class SpellInput(InputObjectType):
+    clss = String(required=True)
+    spell_name = String(required=True)
+    lvl = Int(required=True)
+    rng = String()
+    aoe = String()
+    components = List(String)
+    saving_throw = String()
+    description = String()
+
 
 class CharacterInput(InputObjectType):
     id = ID()
@@ -59,11 +87,61 @@ class PlayerInput(InputObjectType):
     real_name = String()
 
 
-class RegisterPlayer(Mutation):
-    player = Field(Player)
+class CreateSpell(Mutation):
+    class Arguments:
+        spell_data = SpellInput(required=True)
 
+    spell = Field(Spell)
+
+    def mutate(self, info, spell_data=None):
+        spell = SpellModel(
+            clss=spell_data.clss,
+            spell_name=spell_data.spell_name,
+            lvl=spell_data.lvl,
+            rng=spell_data.rng,
+            duration=spell_data.duration,
+            aoe=spell_data.aoe,
+            components=spell_data.components,
+            saving_throw=spell_data.saving_throw,
+            description=spell_data.description,
+        ) 
+        spell.save()
+
+        return CreateSpell(spell=spell)
+
+
+class CreateWeapon(Mutation):
+    class Arguments:
+        weapon_data = WeaponInput(required=True)
+
+    weapon = Field(Weapon)
+
+    def mutate(self, info, weapon_data=None):
+        rate_of_fire = weapon_data.rate_of_fire or '-'
+        rng = weapon_data.rate_of_fire or '-'
+        magic = weapon_data.magic or '-'
+
+        weapon = WeaponModel(
+            name=weapon_data.name,
+            type=weapon_data.type,
+            dmg_sm_md=weapon_data.dmg_sm_md,
+            dmg_lg=weapon_data.dmg_lg,
+            encumbrance=weapon_data.encumbrance,
+            cost=weapon_data.cost,
+            rate_of_fire=rate_of_fire,
+            rng=rng,
+            magic=magic
+        )
+        weapon.save()
+
+        return CreateWeapon(weapon=weapon)
+
+
+class RegisterPlayer(Mutation):
     class Arguments:
         player_data = PlayerInput(required=True)
+
+    player = Field(Player)
 
     def mutate(self, info, player_data=None):
         char_ids = []
@@ -82,10 +160,10 @@ class RegisterPlayer(Mutation):
 
 
 class CreateCharacter(Mutation):
-    character = Field(Character)
-
     class Arguments:
         char_data = CharacterInput(required=True)
+
+    character = Field(Character)
 
     def mutate(self, info, char_data=None):
         if char_data.cur_campaign:

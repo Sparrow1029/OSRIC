@@ -1,6 +1,6 @@
 from mongoengine import connect
 
-from models import (
+from .models import (
     Character,
     Player,
     Stats,
@@ -10,7 +10,8 @@ from models import (
     Modifiers,
 )
 
-connect("dnd-graphene-mongo-test", host="mongomock://localhost", alias="default")
+db = connect("dnd-graphene-mongo-test", host="mongomock://localhost", alias="default")
+
 
 
 def init_db():
@@ -18,16 +19,16 @@ def init_db():
     assassin = Class(name="assassin")
     druid = Class(name="druid")
     cleric = Class(name="cleric")
-    for class_ in [assassin, druid, cleric]:
-        class_.save()
+    for clss in [assassin, druid, cleric]:
+        clss.save()
 
     # Create some abilities
     infravision = Ability(name="infravision", description="60ft")
     detect_stonework = Ability(name="detect_stonework", description="Recognize stonework")
 
     # Race Mods
-    elf_mods = [Modifiers(type_="dex", value=1), Modifiers(type_="con", value=-1)]
-    dwarf_mods = [Modifiers(type_="con", value=1), Modifiers(type_="cha", value=-1)]
+    elf_mods = [Modifiers(type="dex", value=1), Modifiers(type="con", value=-1)]
+    dwarf_mods = [Modifiers(type="con", value=1), Modifiers(type="cha", value=-1)]
 
     # Create races
     dwarf = Race(
@@ -56,7 +57,7 @@ def init_db():
             wis=12,
             cha=14,
         ),
-        class_=assassin,
+        clss=assassin,
         race=elf,
         cur_campaign="Darkness comes",
         align="neutral_evil",
@@ -71,7 +72,7 @@ def init_db():
             wis=15,
             cha=17,
         ),
-        class_=druid,
+        clss=druid,
         race=dwarf,
         cur_campaign="Darkness comes",
         align="neutral_neutral"
@@ -86,11 +87,15 @@ def init_db():
         characters=[dude],
         real_name="Alex"
     )
+    alex.save()
+    # print(alex.pk)
+    # print(db.__dict__)
+
     nikki = Player(
         username="pillowprincess",
         password=Player.set_password("dollybear"),
         characters=[dudette],
         real_name="Nikki"
     )
-    alex.save()
-    nikki.save()
+    # print(nikki.list_indexes())
+    nikki.save(force_insert=True)

@@ -1,4 +1,4 @@
-from database import init_db
+from .database import init_db
 # from mongoengine import connect
 from flask import Flask, request, jsonify
 from flask_graphql import GraphQLView
@@ -7,12 +7,14 @@ import datetime
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token, get_jwt_claims
 )
-from schema import schema
-from models import Player
+from .schema import schema
+from .models import Player
 
 app = Flask(__name__)
 app.debug = True
 app.config["JWT_SECRET_KEY"] = "Gh4fdy7fdqAA8fdfsa80yUt=="
+
+init_db()
 
 jwt = JWTManager(app)
 # GraphQLAuth(app)
@@ -48,6 +50,8 @@ def login():
         return jsonify({ "message": "Invalid request." }), 400
 
     player = Player.objects.get(username=username)
+    if not player:
+        return jsonify({ "message": "Player not found." }), 404
 
     if not player.check_password_hash(password):
         return jsonify({ "message": "Poop on YOU!" }), 401
@@ -68,5 +72,5 @@ def protected():
 
 
 if __name__ == "__main__":
-    init_db()
+    # init_db()
     app.run()

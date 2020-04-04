@@ -1,4 +1,5 @@
-from queries import (
+from graphene import Schema
+from .queries import (
     Query,
     Campaign,
     Player,
@@ -9,8 +10,7 @@ from queries import (
     Class,
     Race,
 )
-from mutations import Mutations
-from graphene import Schema
+from .mutations import Mutations
 
 schema = Schema(
     query=Query,

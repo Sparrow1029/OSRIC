@@ -1,9 +1,9 @@
 from graphene_mongo import MongoengineObjectType
 from flask_jwt_extended import (
-    get_jwt_claims, jwt_required
+    get_jwt_claims, jwt_required, get_jwt_identity
 )
 
-from models import (
+from .models import (
     Campaign as CampaignModel,
     Player as PlayerModel,
     Character as CharacterModel,
@@ -12,6 +12,11 @@ from models import (
     Stats as StatsModel,
     Class as ClassModel,
     Race as RaceModel,
+
+    Spell as SpellModel,
+    Weapon as WeaponModel,
+    Armor as ArmorModel,
+    Item as ItemModel,
 )
 
 from graphene import (
@@ -70,6 +75,26 @@ class Character(MongoengineObjectType):
         model = CharacterModel
 
 
+class Weapon(MongoengineObjectType):
+    class Meta:
+        model = WeaponModel
+
+
+class Armor(MongoengineObjectType):
+    class Meta:
+        model = ArmorModel
+
+
+class Item(MongoengineObjectType):
+    class Meta:
+        model = ItemModel
+
+
+class Spell(MongoengineObjectType):
+    class Meta:
+        model = SpellModel
+
+
 # class Claims(ObjectType):
 #     claims = String()
 def resolve_all_characters(self, info):
@@ -83,11 +108,14 @@ class Query(ObjectType):
     find_race = Field(Race, name=(String(required=True)))
     find_class = Field(Class, name=(String(required=True)))
     # get_claims = Field(Claims)
-    # @jwt_required
+    @jwt_required
     def resolve_all_characters(self, info):
         return list(CharacterModel.objects.all())
 
+    @jwt_required
     def resolve_all_players(self, info):
+        print(get_jwt_claims())
+        print(get_jwt_identity())
         return list(PlayerModel.objects.all())
 
     def resolve_find_character(self, info, name):

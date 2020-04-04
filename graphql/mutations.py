@@ -1,6 +1,6 @@
 from bson import ObjectId
 # from qlmain import jwt
-from models import (
+from .models import (
     Campaign as CampaignModel,
     Player as PlayerModel,
     Character as CharacterModel,
@@ -13,7 +13,7 @@ from models import (
     Spell as SpellModel,
 )
 
-from queries import (
+from .queries import (
     Campaign, Player, Character, Modifiers, Ability, Stats, Weapon,
     Armor, Item, Spell
 

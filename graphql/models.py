@@ -3,7 +3,7 @@ from mongoengine.fields import (
     EmbeddedDocumentField,
     EmbeddedDocumentListField,
     ReferenceField,
-    # ObjectIdField,
+    ObjectIdField,
     StringField,
     FloatField,
     EmailField, ListField,
@@ -49,7 +49,7 @@ class Ability(EmbeddedDocument):
 class Modifiers(EmbeddedDocument):
 
     meta = {"collection": "modifiers"}
-    type_ = StringField(db_field="type", required=True)
+    type = StringField(db_field="type", required=True)
     value = IntField(required=True)
 
 
@@ -87,7 +87,7 @@ class Weapon(Document):
     dmg_lg = StringField()
     encumbrance = FloatField()
     cost = FloatField()
-    magic = String()
+    magic = StringField()
 
     # missile weapons only
     rate_of_fire = FloatField()
@@ -106,10 +106,10 @@ class Armor(Document):
 class Inventory(EmbeddedDocument):
 
     gold = FloatField()
-    loot = EmbeddedDocumentListField(Item)
-    armor = EmbeddedDocumentListField(Armor)
-    weapons = EmbeddedDocumentListField(Weapon)
-    equipment = EmbeddedDocumentListField(Item)
+    loot = ListField(Item)
+    armor =ListField(Armor)
+    weapons = ListField(Weapon)
+    equipment = ListField(Item)
 
 
 class Character(Document):
@@ -126,10 +126,17 @@ class Character(Document):
 
 class Player(Document):
 
-    meta = {"collection": "player"}
-    username = StringField(required=True, unique=True)
+    meta = {
+        "collection": "player",
+        "indexes": ["username"],
+           }
+    # _id = ObjectIdField(unique=True)
+    # username = StringField(required=True, unique=True)
+    # password = StringField(required=True, min_length=8)
+    # email = EmailField(unique=True)
+    username = StringField(required=True)
     password = StringField(required=True, min_length=8)
-    email = EmailField(unique=True)
+    email = EmailField()
     characters = ListField(ReferenceField(Character))
     real_name = StringField()
 

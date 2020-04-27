@@ -108,11 +108,11 @@ class Query(ObjectType):
     find_race = Field(Race, name=(String(required=True)))
     find_class = Field(Class, name=(String(required=True)))
     # get_claims = Field(Claims)
-    @jwt_required
+    # @jwt_required
     def resolve_all_characters(self, info):
         return list(CharacterModel.objects.all())
 
-    @jwt_required
+    # @jwt_required
     def resolve_all_players(self, info):
         print(get_jwt_claims())
         print(get_jwt_identity())

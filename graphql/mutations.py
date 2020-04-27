@@ -12,7 +12,6 @@ from .models import (
     Item as ItemModel,
     Spell as SpellModel,
 )
-
 from .queries import (
     Campaign, Player, Character, Modifiers, Ability, Stats, Weapon,
     Armor, Item, Spell
@@ -64,7 +63,7 @@ class SpellInput(InputObjectType):
 
 
 class CharacterInput(InputObjectType):
-    id = ID()
+    # id = ID()
     player_id = String()
     name = String()
     str = Int()
@@ -75,12 +74,12 @@ class CharacterInput(InputObjectType):
     cha = Int()
     align = String()
     race = String()
-    class_ = String()
+    clss = String()
     cur_campaign = String()
 
 
 class PlayerInput(InputObjectType):
-    id = ID()
+    # id = ID()
     username = String(required=True)
     password = String(required=True)
     characters = List(String)
@@ -104,7 +103,7 @@ class CreateSpell(Mutation):
             components=spell_data.components,
             saving_throw=spell_data.saving_throw,
             description=spell_data.description,
-        ) 
+        )
         spell.save()
 
         return CreateSpell(spell=spell)
@@ -170,8 +169,10 @@ class CreateCharacter(Mutation):
             cur_campaign = char_data.cur_campaign
         else:
             cur_campaign = 'none'
-        get_class = ClassModel.objects.get(name=char_data.class_).id
-        get_race = RaceModel.objects.get(name=char_data.race).id
+        classname = char_data.clss.lower()
+        racename = char_data.race.lower()
+        get_class = ClassModel.objects.get(name=classname).id
+        get_race = RaceModel.objects.get(name=racename).id
         stats = StatsModel(
             str=char_data.str,
             con=char_data.con,
@@ -180,10 +181,11 @@ class CreateCharacter(Mutation):
             wis=char_data.wis,
             cha=char_data.cha,
         )
+        stats.apply_base_stat_race_mods(racename)
         character = CharacterModel(
             name=char_data.name,
             race=get_race,
-            class_=get_class,
+            clss=get_class,
             stats=stats,
             cur_campaign=cur_campaign,
             align=char_data.align,

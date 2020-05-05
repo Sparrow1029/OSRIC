@@ -16,6 +16,8 @@ race_files = [os.path.join(working_dir, 'race_tables', f)
               for f in os.listdir('race_tables')]
 class_files = [os.path.join(working_dir, 'class_tables', f)
                for f in os.listdir('class_tables')]
+spell_files = [os.path.join(working_dir,'spell_tables', f)
+               for f in os.listdir('spell_tables')]
 
 for name in equipment_files:
     with open(name, 'r') as f:
@@ -43,6 +45,7 @@ for name in equipment_files:
             # pprint(d_id)
 
 class_document = defaultdict()
+db = client.classes
 for csv_file in class_files:
     embedded_name = os.path.splitext(os.path.basename(csv_file))[0]
     print(embedded_name)
@@ -77,7 +80,7 @@ for csv_file in class_files:
                     row[i] = row[i].split()
                 class_document[class_name][embedded_name] = dict(zip(headers, row[1:]))
 
-pprint(class_document)
+# pprint(class_document)
 
 
 # for i in class_document:

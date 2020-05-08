@@ -23,7 +23,7 @@ const Button = ({ children, color, variant, size, onClick, type, disabled }) => 
   const setVariant = VARIANTS.includes(variant) ? variant : VARIANTS[0]
   const setSize = SIZES.includes(size) ? size : SIZES[0]
   const isDisabled = (disabled !== undefined) ? 'disabled' : false; 
-  console.log(color, variant, size, type, onClick, disabled, isDisabled)
+  // console.log(color, variant, size, type, onClick, disabled, isDisabled)
 
   return (
     <button

@@ -23,7 +23,7 @@ $
 7-9|one saving throw/ month
 4-6|one saving throw/ 2 months
 3 or less|one saving throw/ 3 months
-$$
+@
 The charm will be broken automatically if the druid obviously tries to harm the charmed creature."
 druid,Create Water,2,10 ft,Instantaneous (permanent),up to 1 ft cu/ lvl,v s,1 turn,none,"This spell creates potable water, four gallons per level of the caster. The water may be created in a receptacle or in thin air (whence it will, of course, fall). Water cannot be created inside a creature, nor can it be created in any place the caster cannot see."
 druid,Cure Light Wounds,2,touch,instantaneous (permanent),creature touched,v s m,4 segments,none (neg.),"Cure light wounds allows the cleric to lay hands upon a wound- ed creature, restoring 1d8 hit points to the spell’s benefici- ary. The reverse of the spell operates in the same manner (al- though requiring a to hit roll), but inflicts 1d8 hit points rather than healing. If the cleric fails to hit while casting cause light wounds, the spell is lost. This spell does not heal disease, reat- tach limbs, or bring back the dead, nor can it add hit points beyond a character’s normal number. Non-corporeal creatures are not affected by this spell, nor are undead, nor are creatures that are harmed only by iron, silver, or magical weapons."
@@ -36,14 +36,14 @@ Round 2|1d4 hp damage
 Rounds 3-5|2d4 hp damage, severe blistering to extremities (hands, feet), and unconsciousness if the metal is a helmet
 Round 6|1d4 hp damage
 Round 7|Discomfort
-$$
+@
 $Cold:
 Round 1|no effect other than discomfort
 Round 2|1d2 hp damage
 Rounds 3-5|1d4 hp damage, severe frostbite (possible need for amputation of extremities such as fingers, ears)
 Round 6|1d4 hp damage
 Round 7|discomfort
-$$
+@
 "
 druid,Locate Plants,2,Caster,1 turn/ caster lvl,5 ft radius/ caster lvl,v s m,1 round,none,"When this spell is used by a druid, he or she is able to locate any desired type of plant within the area of effect. Note: the plant type must be singular and concentrated upon. The spell's area of effect centres on, and moves with, the druid."
 druid,Obscurement,2,0,4 rounds/ caster lvl,10 x 10 ft cube/ caster lvl,v s,4 segments,none,"As this spell is completed, an enchanted mist billows from the area where the druid stands, rapidly filling the area of effect and reducing visibility therein to 1d4 x2 ft. The spell is affected by natural conditions such as strong winds, which will reduce the spell’s effective duration."
@@ -102,7 +102,7 @@ $
 11-20%|Acts normally 21-50 Babbles incoherently
 51-70%|Meanders away from caster for a full turn
 71-00%|Attacks nearest creature
-$$
+@
 Note: a creature that meanders away is not entitled to further saving throws, but will be freed from the spell’s effects after taking a full turn of movement (at normal speed) away from the caster."
 druid,Conjure Earth Elemental,7,40 ft,1 turn/ lvl,-,v s m,1 turn,none,"By means of this spell, the druid summons a 16 HD elemental from the plane of earth. The spell is otherwise identical to the druidic spell conjure fire elemental, but there is no chance to summon a more powerful elemental, as exists when a druid summons fire elementals. As with conjuring fire elementals, the earth elemental will be the druid’s ally by its own will; the druid requires no magical wards against it and need not concentrate upon it after the summoning is complete."
 druid,Control Weather,7,0,8d12 hours,4d8 sq miles,v s m,1 turn,none,"The control weather spell brings about a rapid change in the weather of several square miles surrounding the point where the spell is cast. It requires no more than 10-40 minutes for the spell to take its full effect across the vast area it covers. The spell affects precipitation, temperature, and wind speed. Existing weather conditions cannot be utterly changed by the force of this spell, but druids are able to cause more of a change than druids can with the same spell; effectively twice the amount of change is possible for a druid. The druid could not bring heavy rain forth on a clear day, but could change the weather from clear to partly cloudy, and then to fully cloudy (with light rain, perhaps), all in the course of one casting. By comparison, a druid would only have been able to bring about partial clouds. Hot weather can be made cool, and a strong wind can be raised from calm air. This spell may be cast more than once in succession to bring about a dramatic change, moving, for example, from a calm to a strong wind, then from the strong wind to a full-scale storm."
@@ -127,7 +127,7 @@ $Humanoid Table:Die Roll|New Incarnation
 94-95|Ogre Mage
 96-98|Orc
 99-00|Troll
-$$
+@
 $Animal Table:Die Roll|New Incarnation
 01-05|Badger
 06-18|Bear
@@ -145,5 +145,5 @@ $Animal Table:Die Roll|New Incarnation
 77-84|Stag
 85-92|Wolf
 93-00|Wolverine
-$$"
+@"
 druid,Transmute Metal to Wood,7,80 ft,instantaneous (permanent),one metal object,v s m,9 segments,see text,"Using this spell, the druid may select a single object of metal and change its substance to wood. The spell affects up to 8 lbs of metal per caster level. The item is not entitled to a saving throw, but magic items have a flat 90% chance of being unaffected by the spell."

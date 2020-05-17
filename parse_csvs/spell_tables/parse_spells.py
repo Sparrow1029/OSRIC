@@ -1,6 +1,6 @@
 import os
 from csv import DictReader
-# from collections import defaultdict
+from collections import defaultdict
 from pymongo import MongoClient
 import re
 
@@ -64,7 +64,7 @@ class EmbeddedTable:
         num_fields = len(self.rows[0])
         fmt_row = " {:^30} |"*num_fields
         formatted = [
-            headers, title,
+            title, headers,
             *[fmt_row.format(*row) for row in self.rows] 
         ]
 
@@ -74,8 +74,12 @@ class EmbeddedTable:
 for csv_file in spell_files:
     with open(csv_file, 'r') as fh:
         reader = DictReader(fh)
+        num_cols = len(reader.fieldnames)
+        fmt_str = " {:^15} |"*num_cols
         for i in range(len(reader.fieldnames)):
             reader.fieldnames[i] = reader.fieldnames[i].replace(" ", "_")
+        print(fmt_str.format(*reader.fieldnames))
+
         for row in reader:
             if '$' in row['description']:
                 orig = row['description']
@@ -84,4 +88,5 @@ for csv_file in spell_files:
                 new = ''.join(re.sub(embed_rgx, "!!", orig, re.M | re.S))
                 for e in embedded:
                     new = new.replace("!!", e.pprint(), 1)
-                print(new)
+                row["description"] = new
+            print(fmt_str.format(*row.values()))

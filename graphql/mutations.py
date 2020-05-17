@@ -12,7 +12,7 @@ from .models import (
     Item as ItemModel,
     Spell as SpellModel,
 )
-from .queries import (
+from .graphene_models import (
     Campaign, Player, Character, Modifiers, Ability, Stats, Weapon,
     Armor, Item, Spell
 
@@ -169,8 +169,8 @@ class CreateCharacter(Mutation):
             cur_campaign = char_data.cur_campaign
         else:
             cur_campaign = 'none'
-        classname = char_data.clss.lower()
-        racename = char_data.race.lower()
+        classname = char_data.classname.lower()
+        racename = char_data.racename.lower()
         get_class = ClassModel.objects.get(name=classname).id
         get_race = RaceModel.objects.get(name=racename).id
         stats = StatsModel(
@@ -184,8 +184,10 @@ class CreateCharacter(Mutation):
         stats.apply_base_stat_race_mods(racename)
         character = CharacterModel(
             name=char_data.name,
-            race=get_race,
-            clss=get_class,
+            raceref=get_race,
+            racename=racename,
+            classref=get_class,
+            classname=classname,
             stats=stats,
             cur_campaign=cur_campaign,
             align=char_data.align,

@@ -3,7 +3,7 @@ from mongoengine.fields import (
     EmbeddedDocumentField,
     EmbeddedDocumentListField,
     ReferenceField,
-    ObjectIdField,
+    # ObjectIdField,
     StringField,
     FloatField,
     EmailField, ListField,
@@ -132,8 +132,12 @@ class Character(Document):
     meta = {"collection": "character"}
     name = StringField(max_length=32, required=True)
     stats = EmbeddedDocumentField(Stats, required=True)
-    clss = ReferenceField(Class)
-    race = ReferenceField(Race)
+    classref = ReferenceField(Class)
+    # classname = Class.objects.get(id=classref.id).name
+    classname = StringField(required=True)
+    raceref = ReferenceField(Race)
+    # racename = Race.objects.get(id=raceref.id).name
+    racename = StringField(required=True)
     cur_campaign = StringField()
     align = StringField(required=True)
     inventory = EmbeddedDocumentField(Inventory)

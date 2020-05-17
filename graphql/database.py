@@ -13,7 +13,6 @@ from .models import (
 db = connect("dnd-graphene-mongo-test", host="mongomock://localhost", alias="default")
 
 
-
 def init_db():
     # Create classes
     assassin = Class(name="assassin")
@@ -57,8 +56,10 @@ def init_db():
             wis=12,
             cha=14,
         ),
-        clss=assassin,
-        race=elf,
+        classref=assassin,
+        classname=assassin.name,
+        raceref=elf,
+        racename=elf.name,
         cur_campaign="Darkness comes",
         align="neutral_evil",
     )
@@ -72,8 +73,10 @@ def init_db():
             wis=15,
             cha=17,
         ),
-        clss=druid,
-        race=dwarf,
+        classref=druid,
+        classname=druid.name,
+        raceref=dwarf,
+        racename=dwarf.name,
         cur_campaign="Darkness comes",
         align="neutral_neutral"
     )
@@ -98,4 +101,4 @@ def init_db():
         real_name="Nikki"
     )
     # print(nikki.list_indexes())
-    nikki.save(force_insert=True)
+    nikki.save()

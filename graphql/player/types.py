@@ -1,7 +1,10 @@
 from graphene_mongo import MongoengineObjectType
-from .models import Player as PlayerModel
+from graphene.relay import Node
+
+from .models import Player
 
 
-class Player(MongoengineObjectType):
+class PlayerType(MongoengineObjectType):
     class Meta:
-        model = PlayerModel
+        model = Player
+        interfaces = (Node,)

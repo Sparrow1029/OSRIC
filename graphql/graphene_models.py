@@ -19,6 +19,7 @@ from .models import (
     Item as ItemModel,
 )
 
+
 class Campaign(MongoengineObjectType):
     class Meta:
         model = CampaignModel

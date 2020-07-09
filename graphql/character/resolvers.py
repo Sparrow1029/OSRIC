@@ -1,5 +1,6 @@
-def resolve_all_characters(query, info):
-    return list(query.objects.all())
+from .models import Character
 
-def resolve_query(query, info, name):
-    return query.objects.get(name=name)
+
+def resolve_get_character_inventory(char_id):
+    character = Character.objects.get(id=char_id)
+    return character.inventory

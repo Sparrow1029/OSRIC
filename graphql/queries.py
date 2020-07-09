@@ -19,11 +19,11 @@ from graphene_mongo import MongoengineConnectionField
 
 from graphene import (
     ObjectType,
-#     Mutation,
-#     String,
-#     Field,
-#     Union,
-#     List,
+    # Mutation,
+    # String,
+    # Field,
+    # Union,
+    # List,
 )
 
 
@@ -34,7 +34,7 @@ from graphene import (
 
 
 class Query(ObjectType):
-    #all_characters = List(Character, resolver=resolve_all_characters)
+    # all_characters = List(Character, resolver=resolve_all_characters)
     node = Node.Field()
     # all_players = List(Player, resolver=resolve_all_players)
     # find_character = Field(Character, name=(String(required=True)))

@@ -29,20 +29,20 @@ class Stats(EmbeddedDocument):
     wis = IntField(required=True)
     cha = IntField(required=True)
 
-    # def apply_base_stat_race_mods(self, racename):
-    #     if racename == 'dwarf':
-    #         self.con += 1
-    #         self.cha -= 1
-    #     elif racename == 'elf':
-    #         self.dex += 1
-    #         self.con -= 1
-    #     elif racename == 'halfling':
-    #         self.str -= 1
-    #         self.dex += 1
-    #     elif racename == 'half-orc':
-    #         self.str += 1
-    #         self.con += 1
-    #         self.cha -= 2
+    def apply_base_stat_race_mods(self, racename):
+        if racename == 'dwarf':
+            self.con += 1
+            self.cha -= 1
+        elif racename == 'elf':
+            self.dex += 1
+            self.con -= 1
+        elif racename == 'halfling':
+            self.str -= 1
+            self.dex += 1
+        elif racename == 'half-orc':
+            self.str += 1
+            self.con += 1
+            self.cha -= 2
 
 
 class Character(Document):

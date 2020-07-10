@@ -1,55 +1,34 @@
-import graphene
-import graphene_mongo
+from graphene_mongo import MongoengineObjectType
+from graphene.relay import Node
 
-from mongoengine import Document, EmbeddedDocument
-from mongoengine.fields import (
-    EmbeddedDocumentField, EmbeddedDocumentListField, 
-    StringField, ListField, IntField, ReferenceField
-)
+from .models import ClassMods, Ability, Modifier, Race, Class
 
 
-class Ability(EmbeddedDocument):
-
-    meta = {"collection": "ability"}
-    name = StringField(max_length=32, required=True)
-    description = StringField()
-
-
-class Modifiers(EmbeddedDocument):
-
-    meta = {"collection": "modifiers"}
-    type_ = StringField(db_field="type", required=True)
-    value = IntField(required=True)
+class ClassModsType(MongoengineObjectType):
+    class Meta:
+        model = ClassMods
+        interfaces = (Node,)
 
 
-class Race(Document):
-
-    name = StringField(required=True)
-    mods = EmbeddedDocumentListField(Modifiers)
-    abilities = EmbeddedDocumentListField(Ability)
-    permitted_classes = ListField(StringField())
+class AbilityType(MongoengineObjectType):
+    class Meta:
+        model = Ability
+        interfaces = (Node,)
 
 
-class ClassMods(EmbeddedDocument):
-
-    min_str = IntField()
-    min_dex = IntField()
-    min_con = IntField()
-    min_int = IntField()
-    min_wis = IntField()
-    min_cha = IntField()
-    hit_die = StringField()
-    alignment = StringField()
-    armor_type = ListField()
-    shield_type = StringField()
-    weapons = ListField()
-    proficiencies = StringField()
-    penalty_to_hit = IntField()
+class ModifierType(MongoengineObjectType):
+    class Meta:
+        model = Modifier
+        interfaces = (Node,)
 
 
-class Class(Document):
+class RaceType(MongoengineObjectType):
+    class Meta:
+        model = Race
+        interfaces = (Node,)
 
-    meta = {"collection": "class"}
-    name = StringField(required=True)
-    mods = EmbeddedDocumentField(ClassMods)
-    abilities = EmbeddedDocumentListField(Ability)
+
+class ClassType(MongoengineObjectType):
+    class Meta:
+        model = Class
+        interfaces = (Node,)

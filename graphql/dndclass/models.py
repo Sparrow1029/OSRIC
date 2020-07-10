@@ -9,7 +9,6 @@ from mongoengine.fields import (
 
 
 class ClassMods(EmbeddedDocument):
-
     min_str = IntField()
     min_dex = IntField()
     min_con = IntField()
@@ -26,29 +25,24 @@ class ClassMods(EmbeddedDocument):
 
 
 class Ability(EmbeddedDocument):
-
-    meta = {"collection": "ability"}
     name = StringField(max_length=32, required=True)
     description = StringField()
 
 
-class Modifiers(EmbeddedDocument):
-
-    meta = {"collection": "modifiers"}
+class Modifier(EmbeddedDocument):
     name = StringField(db_field="type", required=True)
     value = IntField(required=True)
 
 
 class Race(Document):
-
+    meta = {"collection": "races"}
     name = StringField(required=True)
-    mods = EmbeddedDocumentListField(Modifiers)
+    mods = EmbeddedDocumentListField(Modifier)
     abilities = EmbeddedDocumentListField(Ability)
     permitted_classes = ListField(StringField())
 
 
 class Class(Document):
-
     meta = {"collection": "classes"}
     name = StringField(required=True)
     mods = EmbeddedDocumentField(ClassMods)

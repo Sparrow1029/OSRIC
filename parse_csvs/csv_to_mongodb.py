@@ -83,14 +83,14 @@ for csv_file in class_files:
 # pprint(class_document)
 
 
-# for i in class_document:
-#     print(f"{i.upper():#^20}")
-#     to_hit_tbl = class_document[i]["to_hit"]
-#     for lvl in to_hit_tbl:
-#         print(f"LEVEL {lvl:#<77}")
-#         for hit in to_hit_tbl[lvl].keys():
-#             print(f"{hit: >3}", end=' ')
-#         print()
-#         for score in to_hit_tbl[lvl].values():
-#             print(f"{score: >3}", end=' ')
-#         print('\n' + '-'*83)
+for i in class_document:
+    print(f"{i.upper():#^20}")
+    to_hit_tbl = class_document[i]["to_hit"]
+    for lvl in to_hit_tbl:
+        print(f"LEVEL {lvl:#<77}")
+        for hit in to_hit_tbl[lvl].keys():
+            print(f"{hit: >3}", end=' ')
+        print()
+        for score in to_hit_tbl[lvl].values():
+            print(f"{score: >3}", end=' ')
+        print('\n' + '-'*83)

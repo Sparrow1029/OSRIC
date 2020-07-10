@@ -6,7 +6,6 @@ from ..dndclass.models import Race, Class
 
 
 class CharacterInput(InputObjectType):
-    # id = ID()
     player_id = String()
     name = String()
     str = Int()
@@ -32,8 +31,8 @@ class CreateCharacter(Mutation):
             cur_campaign = char_data.cur_campaign
         else:
             cur_campaign = 'none'
-        classname = char_data.classname.lower()
-        racename = char_data.racename.lower()
+        classname = char_data.clss.lower()
+        racename = char_data.race.lower()
         get_class = Class.objects.get(name=classname).id
         get_race = Race.objects.get(name=racename).id
         stats = Stats(
@@ -47,10 +46,8 @@ class CreateCharacter(Mutation):
         stats.apply_base_stat_race_mods(racename)
         character = Character(
             name=char_data.name,
-            raceref=get_race,
-            racename=racename,
-            classref=get_class,
-            classname=classname,
+            race=get_race,
+            clss=get_class,
             stats=stats,
             cur_campaign=cur_campaign,
             align=char_data.align,

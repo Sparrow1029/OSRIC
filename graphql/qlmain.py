@@ -1,6 +1,7 @@
 from .database import init_db
 # from mongoengine import connect
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from flask_graphql import GraphQLView
 import datetime
 # from flask_graphql_auth import GraphQLAuth
@@ -11,6 +12,7 @@ from .schema import schema
 from .models import Player
 
 app = Flask(__name__)
+CORS(app)
 app.debug = True
 app.config["JWT_SECRET_KEY"] = "Gh4fdy7fdqAA8fdfsa80yUt=="
 

@@ -6,9 +6,32 @@ import './Welcome.css';
 
 import Dragon from '../Icons/Dragon.js';
 
+import { useQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
+
+const GET_CHARS = gql`
+  {
+    characters {
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
+  }
+`
+
 const Welcome = () => {
   const {toggle: toggleLogin, RenderModal: RenderLogin} = useModal();
   const {toggle: toggleRegister, RenderModal: RenderRegister} = useModal();
+  const { loading, error, data } = useQuery(GET_CHARS);
+
+  if (loading) console.log("loading");
+  if (error) console.log("error");
+
+  let characters = data;
+  console.log(characters);
 
   return (
     <div className="container">
@@ -40,6 +63,15 @@ const Welcome = () => {
             onClick={toggleLogin}
           >
             Login
+          </Button>
+          <Button
+            variant="filled"
+            color="primary"
+            size="large"
+            type="input"
+            onClick={toggleRegister}
+          >
+            Register
           </Button>
           <Button
             variant="filled"

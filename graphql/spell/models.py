@@ -9,7 +9,6 @@ from ..dndclass import Class
 
 
 class Spell(Document):
-
     meta = {"collection": "spells"}
     clss = ReferenceField(Class)
     spell_name = StringField(required=True, unique=True)

@@ -1,3 +1,4 @@
+from datetime import datetime
 from .db import db
 
 
@@ -50,3 +51,25 @@ class Spell(db.Document):
     components = db.ListField()
     saving_throw = db.StringField(default='None')
     description = db.StringField()
+
+
+class Note(db.EmbeddedDocument):
+    # date = db.DateTimeField(default=datetime.utcnow)
+    author = db.ObjectIdField()  # Player ID
+    title = db.StringField(max_length=32)
+    content = db.StringField(required=True)
+
+
+class Session(db.EmbeddedDocument):
+    date = db.DateTimeField(default=datetime.utcnow)
+    notes = db.ListField(db.ObjectIdField())  # Note IDs
+    npcs = db.ListField(db.ObjectIdField())
+    monsters = db.ListField(db.ObjectIdField())
+
+
+class Campaign(db.EmbeddedDocument):
+    title = db.StringField(required=True)
+    dungeon_master = db.ObjectIdField()
+    players = db.ListField(db.ObjectIdField)  # Player IDs
+    # players = db.ListField(db.ReferenceField(Player))
+    sessions = db.EmbeddedDocumentListField(Session)

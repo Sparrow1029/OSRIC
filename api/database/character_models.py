@@ -3,7 +3,6 @@ from .db import db
 from .object_models import Item, Weapon, Armor
 from .class_models import Class
 from .race_models import Race
-from .player_models import Player
 
 
 class Inventory(db.EmbeddedDocument):
@@ -21,4 +20,4 @@ class Character(db.EmbeddedDocument):
     race = db.ReferenceField(Race)
     inventory = db.EmbeddedDocumentField(Inventory)
     created_at = db.DateTimeField(default=datetime.utcnow)
-    owner = db.ReferenceField(Player)
+    owner = db.ObjectIdField()

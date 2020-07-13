@@ -43,9 +43,9 @@ class Ability(db.EmbeddedDocument):
 class Spell(db.Document):
     meta = {"collection": "spells"}
     classname = db.StringField()
-    spellname = db.StringField(required=True, unique=True)
+    spellname = db.StringField(required=True)
     level = db.IntField()
-    rng = db.StringField()
+    range = db.StringField()
     duration = db.StringField()
     aoe = db.StringField()
     components = db.ListField()
@@ -55,7 +55,7 @@ class Spell(db.Document):
 
 class Note(db.EmbeddedDocument):
     # date = db.DateTimeField(default=datetime.utcnow)
-    author = db.ObjectIdField()  # Player ID
+    author = db.ReferenceField('Player')
     title = db.StringField(max_length=32)
     content = db.StringField(required=True)
 
@@ -69,7 +69,7 @@ class Session(db.EmbeddedDocument):
 
 class Campaign(db.EmbeddedDocument):
     title = db.StringField(required=True)
-    dungeon_master = db.ObjectIdField()
-    players = db.ListField(db.ObjectIdField)  # Player IDs
+    dungeon_master = db.ReferenceField('Player')
+    players = db.ListField(db.ReferenceField('Player'))
     # players = db.ListField(db.ReferenceField(Player))
     sessions = db.EmbeddedDocumentListField(Session)

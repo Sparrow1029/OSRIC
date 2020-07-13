@@ -13,11 +13,11 @@ class Inventory(db.EmbeddedDocument):
     equipment = db.ListField(db.ReferenceField(Item))
 
 
-class Character(db.EmbeddedDocument):
+class Character(db.Document):
     name = db.StringField(required=True)
     level = db.IntField(default=0)
     clss = db.ReferenceField(Class)
     race = db.ReferenceField(Race)
     inventory = db.EmbeddedDocumentField(Inventory)
     created_at = db.DateTimeField(default=datetime.utcnow)
-    owner = db.ObjectIdField()
+    owner = db.ReferenceField('Player')

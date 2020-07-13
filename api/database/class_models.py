@@ -34,6 +34,7 @@ class ThiefChance(db.EmbeddedDocument):
     open_locks = db.FloatField()
     pick_pockets = db.FloatField()
     read_languages = db.FloatField()
+    class_adj = db.DictField()
 
 
 class Class(db.Document):

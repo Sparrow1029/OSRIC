@@ -1,8 +1,7 @@
 from datetime import datetime
 from .db import db
 from .object_models import Item, Weapon, Armor
-from .class_models import Class
-from .race_models import Race
+from .class_models import Class, Race
 
 
 class Inventory(db.EmbeddedDocument):

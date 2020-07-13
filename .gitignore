@@ -6,6 +6,9 @@ __pycache__/
 migrations/
 *.db
 
+# Authfiles
+.env
+
 # Temp/old/dead files
 *.BAK
 *.bak

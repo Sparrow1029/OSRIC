@@ -34,6 +34,14 @@ class ThiefChance(db.EmbeddedDocument):
     open_locks = db.FloatField()
     pick_pockets = db.FloatField()
     read_languages = db.FloatField()
+
+
+class Race(db.Document):
+    meta = {"collection": "races"}
+    name = db.StringField(required=True)
+    mods = db.DictField()
+    abilities = db.EmbeddedDocumentListField(Ability)
+    permitted_classes = db.ListField(db.StringField())
     class_adj = db.DictField()
 
 
@@ -45,5 +53,5 @@ class Class(db.Document):
     saving_throws = db.DictField()
     to_hit = db.DictField()
     level_advancement = db.EmbeddedDocumentListField(LevelAdvancement)
-    skill_chance = db.EmbeddedDocumentListField(ThiefChance)
-    spells = db.ListField(db.ReferenceField(Spell))
+    skill_chance = db.EmbeddedDocumentListField(ThiefChance, null=True)
+    spells = db.ListField(db.ReferenceField(Spell, reverse_delete_rule=db.PULL))

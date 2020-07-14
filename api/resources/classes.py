@@ -4,7 +4,7 @@ from flask_restx import Resource, abort
 from bson import ObjectId
 from flask_jwt_extended import jwt_required
 
-from database.class_models import Class
+from ..database.class_models import Class
 from .routes import dnd_api as api
 from .api_models import clss
 

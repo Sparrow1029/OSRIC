@@ -1,12 +1,11 @@
 from flask import Response, request
-from database.object_models import Spell
-from database.class_models import Class
-from bson import ObjectId
-from mongoengine.queryset.visitor import Q
-
 from flask_restx import Resource
 from flask_jwt_extended import jwt_required
 
+from ..database.object_models import Spell
+from ..database.class_models import Class
+from bson import ObjectId
+# from mongoengine.queryset.visitor import Q
 from .routes import dnd_api as api
 from .api_models import spell, spell_delete
 

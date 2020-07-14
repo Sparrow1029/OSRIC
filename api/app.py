@@ -8,7 +8,7 @@ import click
 
 from .resources.routes import dnd_api, initialize_routes
 from .database.db import db
-from .database.initdb import seed_db
+# from .database.initdb import seed_db
 
 app = Flask(__name__)
 
@@ -30,10 +30,10 @@ dnd_api.init_app(app)
 initialize_routes(dnd_api)
 db.init_app(app)
 
-@app.cli.command()
-def initdb():
-    click.echo("Seeding initial database...")
-    seed_db()
+# @app.cli.command()
+# def initdb():
+#     click.echo("Seeding initial database...")
+#     seed_db()
 
 
 if __name__ == "__main__":

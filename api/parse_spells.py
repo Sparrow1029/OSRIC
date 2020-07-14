@@ -1,21 +1,19 @@
 import os
-from csv import DictReader
-from collections import defaultdict
-from pymongo import MongoClient
 import re
+from csv import DictReader
 
-client = MongoClient('localhost', 27017)
-db = client.spells
+from database.object_models import Spell, db
+
+db.connect('dnd_database', host='127.0.0.1', port=27017)
+
 
 working_dir = os.path.dirname(os.path.abspath(__file__))
-spell_files = [os.path.join(working_dir, f)
-               for f in os.listdir(working_dir) if f.endswith('.csv')]
 
-
+spell_file = os.path.join(working_dir, "database", "seed_data", "all_spells.csv")
 embed_rgx = re.compile(r"\$[^\$]*@", re.S | re.M)
 
-class EmbeddedTable:
 
+class EmbeddedTable:
     def __init__(self, text):
         self.data = text
         self.title = None
@@ -71,22 +69,40 @@ class EmbeddedTable:
         return '\n'.join(formatted)
 
 
-for csv_file in spell_files:
-    with open(csv_file, 'r') as fh:
-        reader = DictReader(fh)
-        num_cols = len(reader.fieldnames)
-        fmt_str = " {:^15} |"*num_cols
-        for i in range(len(reader.fieldnames)):
-            reader.fieldnames[i] = reader.fieldnames[i].replace(" ", "_")
-        print(fmt_str.format(*reader.fieldnames))
-
+def parse_spells(csv_file):
+    with open(csv_file, 'r') as f:
+        reader = DictReader(f)
         for row in reader:
-            if '$' in row['description']:
-                orig = row['description']
-                tables = EmbeddedTable.get_tables(orig)
+            embedded_tables = []
+            orig_description = row['description']
+            if '$' in orig_description:
+                new_description = re.sub(embed_rgx, '', orig_description)
+                tables = EmbeddedTable.get_tables(orig_description)
                 embedded = [EmbeddedTable(data) for data in tables]
-                new = ''.join(re.sub(embed_rgx, "!!", orig, re.M | re.S))
-                for e in embedded:
-                    new = new.replace("!!", e.pprint(), 1)
-                row["description"] = new
-            print(fmt_str.format(*row.values()))
+
+                embedded_tables = [
+                    {"title": e.title,
+                     "headers": e.headers,
+                     "rows": e.rows} for e in embedded]
+
+            spell = Spell(
+                classname=row["classname"].lower(),
+                spellname=row["spellname"].lower(),
+                level=row["level"],
+                range=row["range"],
+                duration=row["duration"],
+                aoe=row["aoe"],
+                components=row["components"].split(),
+                casting_time=row["casting_time"],
+                saving_throw=row["saving_throw"],
+                description=orig_description,
+            )
+            if embedded_tables:
+                spell.embedded_tables = embedded_tables
+                spell.description = new_description
+
+            spell.save()
+
+
+if __name__ == "__main__":
+    parse_spells(spell_file)

@@ -1,6 +1,7 @@
 from .db import db
 from .object_models import Ability, Spell
 
+
 class ClassRestrictions(db.EmbeddedDocument):
     min_str = db.IntField()
     min_dex = db.IntField()

@@ -49,8 +49,10 @@ class Spell(db.Document):
     duration = db.StringField()
     aoe = db.StringField()
     components = db.ListField()
+    casting_time = db.StringField()
     saving_throw = db.StringField(default='None')
     description = db.StringField()
+    embedded_tables = db.ListField(db.DictField(), null=True)
 
 
 class Note(db.EmbeddedDocument):

@@ -9,3 +9,6 @@ migrations/
 # Temp/old/dead files
 *.BAK
 *.bak
+
+# React
+node_modules/

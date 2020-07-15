@@ -15,7 +15,7 @@ spell_files = [os.path.join(working_dir, f)
 embed_rgx = re.compile(r"\$[^\$]*@", re.S | re.M)
 
 class EmbeddedTable:
-    
+
     def __init__(self, text):
         self.data = text
         self.title = None
@@ -65,7 +65,7 @@ class EmbeddedTable:
         fmt_row = " {:^30} |"*num_fields
         formatted = [
             title, headers,
-            *[fmt_row.format(*row) for row in self.rows] 
+            *[fmt_row.format(*row) for row in self.rows]
         ]
 
         return '\n'.join(formatted)

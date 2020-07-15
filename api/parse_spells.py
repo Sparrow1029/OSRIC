@@ -1,6 +1,7 @@
 import os
 import re
 from csv import DictReader
+from collections import defaultdict
 
 from database.object_models import Spell, db
 
@@ -10,6 +11,7 @@ db.connect('dnd_database', host='127.0.0.1', port=27017)
 working_dir = os.path.dirname(os.path.abspath(__file__))
 
 spell_file = os.path.join(working_dir, "database", "seed_data", "all_spells.csv")
+abilities_file = os.path.join(working_dir, "database", "seed_data", "class_abilities.csv")
 embed_rgx = re.compile(r"\$[^\$]*@", re.S | re.M)
 
 
@@ -104,5 +106,30 @@ def parse_spells(csv_file):
             spell.save()
 
 
-if __name__ == "__main__":
-    parse_spells(spell_file)
+def parse_class_abilities(csv_file):
+    abilities_dict = {
+        "fighter": [],
+        "paladin": [],
+        "cleric": [],
+        "thief": [],
+        "assassin": [],
+        "ranger": [],
+        "magic_user": [],
+        "illusionist": [],
+        "druid": [],
+    }
+    with open(csv_file, 'r') as f:
+        reader = DictReader(f)
+        for row in reader:
+            ability = defaultdict()
+            for header in reader.fieldnames[1:]:
+                ability[header] = row[header]
+            abilities_dict[row["class"].strip()].append(ability)
+
+    return abilities_dict
+
+    # import pprint
+    # pprint.pprint(abilities_dict)
+
+# if __name__ == "__main__":
+#     parse_spells(spell_file)

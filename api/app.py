@@ -30,9 +30,9 @@ dnd_api.init_app(app)
 initialize_routes(dnd_api)
 db.init_app(app)
 
-# @app.cli.command()
-# def initdb():
-#     click.echo("Seeding initial database...")
+@app.cli.command()
+def initdb():
+    click.echo("Seeding initial database...")
 #     seed_db()
 
 

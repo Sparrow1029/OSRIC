@@ -10,12 +10,18 @@ class ClassRestrictions(db.EmbeddedDocument):
     min_wis = db.IntField()
     min_cha = db.IntField()
     hit_die = db.StringField()
-    alignment = db.StringField()
+    alignment = db.ListField()
     armor = db.ListField()
-    shield = db.StringField()
+    shield = db.ListField()
     weapons_permitted = db.ListField()
     proficiencies = db.StringField()
     penalty_to_hit = db.IntField()
+
+
+class SpellsByLevel(db.EmbeddedDocument):
+    spell_class = db.StringField()
+    level = db.IntField()
+    spells = db.DictField()
 
 
 class LevelAdvancement(db.EmbeddedDocument):
@@ -25,31 +31,18 @@ class LevelAdvancement(db.EmbeddedDocument):
     notes = db.StringField()
 
 
-class ThiefChance(db.EmbeddedDocument):
-    level = db.IntField()
-    climb_walls = db.FloatField()
-    find_traps = db.FloatField()
-    hear_noise = db.FloatField()
-    hide_in_shadows = db.FloatField()
-    move_quietly = db.FloatField()
-    open_locks = db.FloatField()
-    pick_pockets = db.FloatField()
-    read_languages = db.FloatField()
-
-
 class Race(db.Document):
     meta = {"collection": "races"}
-    name = db.StringField(required=True)
-    mods = db.DictField()
-    abilities = db.EmbeddedDocumentListField(Ability)
+    name = db.StringField(unique=True, required=True)
+    base_stat_mods = db.DictField()
+    abilities = db.DictField()
+    bonuses = db.ListField(db.StringField())
+    languages = db.ListField(db.StringField())
+    max_addl_languages = db.IntField(default=0)
     permitted_classes = db.ListField(db.StringField())
-    class_adj = db.DictField()
-
-
-class SpellsByLevel(db.EmbeddedDocument):
-    spell_class = db.StringField()
-    level = db.IntField()
-    spells = db.DictField()
+    starting_age = db.DictField()
+    score_limits = db.DictField()
+    movement_rate = db.IntField()
 
 
 class Class(db.Document):
@@ -60,7 +53,6 @@ class Class(db.Document):
     saving_throws = db.DictField()
     to_hit = db.DictField()
     level_advancement = db.EmbeddedDocumentListField(LevelAdvancement)
-    skill_chance = db.EmbeddedDocumentListField(ThiefChance)
     spells = db.ListField(db.ReferenceField(Spell, reverse_delete_rule=db.PULL))
     spells_by_level = db.EmbeddedDocumentListField(SpellsByLevel)
 

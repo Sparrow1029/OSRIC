@@ -21,6 +21,18 @@ class Inventory(db.EmbeddedDocument):
     equipment = db.ListField(db.ReferenceField(Item))
 
 
+class ThiefChance(db.EmbeddedDocument):
+    level = db.IntField()
+    climb_walls = db.FloatField()
+    find_traps = db.FloatField()
+    hear_noise = db.FloatField()
+    hide_in_shadows = db.FloatField()
+    move_quietly = db.FloatField()
+    open_locks = db.FloatField()
+    pick_pockets = db.FloatField()
+    read_languages = db.FloatField()
+
+
 class Character(db.Document):
     name = db.StringField(required=True)
     level = db.IntField(default=0)
@@ -30,3 +42,7 @@ class Character(db.Document):
     inventory = db.EmbeddedDocumentField(Inventory)
     created_at = db.DateTimeField(default=datetime.utcnow)
     owner = db.ReferenceField('Player')
+
+    def determine_thief_chance():
+        # skill_chance = db.EmbeddedDocumentListField(ThiefChance)
+        pass

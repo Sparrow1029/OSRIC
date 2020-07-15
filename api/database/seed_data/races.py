@@ -51,8 +51,8 @@ ELF = {
         "str": 0, "dex": 1, "con": -1,
         "int": 0, "wis": 0, "cha": 0
     },
+    "bonuses": ["90% resistance to sleep and charm spells"],
     "abilities": {
-        "bonuses": ["90% resistance to sleep and charm spells"],
         "any_pulled_bow": "+1 to hit",
         "longsword_and_short_sword": "+1 to hit",
         "infravision": 60,

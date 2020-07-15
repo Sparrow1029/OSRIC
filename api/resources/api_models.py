@@ -3,10 +3,9 @@ from .routes import dnd_api as api
 
 
 class MongoId(fields.Raw):
-    def __init__(self, readonly=False, **kwargs):
+    def __init__(self, *args, **kwargs):
         self.desc = "Mongodb ObjectId ($oid)"
-        self.readonly = readonly
-        super().__init__(readonly=self.readonly, description=self.desc, **kwargs)
+        super().__init__(description=self.desc, *args, **kwargs)
 
     def format(self, value):
         return str(value)
@@ -57,8 +56,7 @@ thief_chance = api.model("ThiefChance", {
     "read_languages": fields.Float,
 })
 
-spell = api.model("Spell", {
-    "id": MongoId,
+spell_input = api.model("SpellInput", {
     "classname": fields.String,
     "spellname": fields.String(required=True),
     "level": fields.Integer,
@@ -68,12 +66,10 @@ spell = api.model("Spell", {
     "components": fields.List(fields.String),
     "saving_throw": fields.String(default='None'),
     "description": fields.String,
-})
+}, mask={"id", "classname"})
 
-spell_delete = api.model("DeleteSpell", {
-    "id": MongoId(required=False),
-    "classname": fields.String(required=False),
-    "spellname": fields.String(required=False)
+spell = api.clone("Spell", spell_input, {
+    "id": MongoId
 })
 
 clss = api.model("Class", {

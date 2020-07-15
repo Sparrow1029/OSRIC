@@ -1,3 +1,4 @@
+# from . import db
 from .db import db
 from .object_models import Ability, Spell
 
@@ -55,4 +56,3 @@ class Class(db.Document):
     level_advancement = db.EmbeddedDocumentListField(LevelAdvancement)
     spells = db.ListField(db.ReferenceField(Spell, reverse_delete_rule=db.PULL))
     spells_by_level = db.EmbeddedDocumentListField(SpellsByLevel)
-

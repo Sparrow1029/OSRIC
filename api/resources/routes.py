@@ -19,5 +19,7 @@ def initialize_routes(api):
     from .spells import SpellsApi, SpellApi
     # from .player import PlayersApi, PlayerApi
     # from .auth import SignupApi, LoginApi
+    api.add_resource(SpellsApi)
+    api.add_resource(SpellApi)
     api.add_resource(ClassesApi)
     api.add_resource(ClassApi)

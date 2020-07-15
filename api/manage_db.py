@@ -2,7 +2,7 @@ from database.db import db
 from database.class_models import (
     Class, Race, ClassRestrictions, LevelAdvancement, SpellsByLevel
 )
-from database.object_models import Ability  # Spell, Item, Weapon, Armor
+from database.object_models import Ability, Spell  # Item, Weapon, Armor
 from database.seed_data.class_dicts import (
     RESTRICTIONS_DICT, SAVING_THROWS_DICT, TO_HIT_DICT
 )
@@ -16,10 +16,12 @@ classnames = ["druid", "thief", "ranger", "cleric", "fighter", "paladin", "assas
               "illusionist"]
 races = [HUMAN, HALFLING, HALF_ELF, HALF_ORC, ELF, GNOME, DWARF]
 
-abilities_file = "/home/sparrow/Projects/Python/OSRIC/api/database/seed_data/class_abilities.csv"
-spell_file = "/home/sparrow/Projects/Python/OSRIC/api/database/seed_data/all_spells.csv"
+# abilities_file = "/home/sparrow/Projects/Python/OSRIC/api/database/seed_data/class_abilities.csv"
+# spell_file = "/home/sparrow/Projects/Python/OSRIC/api/database/seed_data/all_spells.csv"
+abilities_file = "/home/sparrow/Projects/DnDTracker/api/database/seed_data/class_abilities.csv"
+spell_file = "/home/sparrow/Projects/DnDTracker/api/database/seed_data/all_spells.csv"
 abilities_dict = parse_class_abilities(abilities_file)
-# parse_spells(spell_file)
+
 
 def create_classes():
     for classname in classnames:
@@ -52,9 +54,6 @@ def create_classes():
         db_class_obj.save()
 
 
-# create_classes()
-
-
 def create_races():
     for race in races:
         db_race_obj = Race(
@@ -73,4 +72,18 @@ def create_races():
         db_race_obj.save()
 
 
-create_races()
+def link_spells():
+    for classname in classnames:
+        spell_objs = Spell.objects.filter(classname=classname)
+        if spell_objs:
+            class_obj = Class.objects.get(classname=classname)
+            class_obj.spells.extend([spell.id for spell in spell_objs])
+            class_obj.save()
+
+
+if __name__ == "__main__":
+    pass
+    # parse_spells(spell_file)
+    # create_classes()
+    # create_races()
+    # link_spells()

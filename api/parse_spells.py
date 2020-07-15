@@ -88,8 +88,8 @@ def parse_spells(csv_file):
                      "rows": e.rows} for e in embedded]
 
             spell = Spell(
-                classname=row["classname"].lower(),
-                spellname=row["spellname"].lower(),
+                classname=row["classname"].strip().lower(),
+                spellname=row["spellname"].strip().lower(),
                 level=row["level"],
                 range=row["range"],
                 duration=row["duration"],

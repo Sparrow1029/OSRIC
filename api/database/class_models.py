@@ -22,7 +22,7 @@ class LevelAdvancement(db.EmbeddedDocument):
     level = db.IntField()
     exp_req = db.IntField()
     num_hit_dice = db.IntField()
-    notes = db.StringField(null=True)
+    notes = db.StringField()
 
 
 class ThiefChance(db.EmbeddedDocument):
@@ -46,6 +46,12 @@ class Race(db.Document):
     class_adj = db.DictField()
 
 
+class SpellsByLevel(db.EmbeddedDocument):
+    spell_class = db.StringField()
+    level = db.IntField()
+    spells = db.DictField()
+
+
 class Class(db.Document):
     meta = {"collection": "classes"}
     classname = db.StringField()
@@ -54,5 +60,7 @@ class Class(db.Document):
     saving_throws = db.DictField()
     to_hit = db.DictField()
     level_advancement = db.EmbeddedDocumentListField(LevelAdvancement)
-    skill_chance = db.EmbeddedDocumentListField(ThiefChance, null=True)
+    skill_chance = db.EmbeddedDocumentListField(ThiefChance)
     spells = db.ListField(db.ReferenceField(Spell, reverse_delete_rule=db.PULL))
+    spells_by_level = db.EmbeddedDocumentListField(SpellsByLevel)
+

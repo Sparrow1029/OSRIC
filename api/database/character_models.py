@@ -4,6 +4,15 @@ from .object_models import Item, Weapon, Armor
 from .class_models import Class, Race
 
 
+class Stats(db.EmbeddedDocument):
+    str = db.IntField(required=True)
+    con = db.IntField(required=True)
+    dex = db.IntField(required=True)
+    int = db.IntField(required=True)
+    wis = db.IntField(required=True)
+    cha = db.IntField(required=True)
+
+
 class Inventory(db.EmbeddedDocument):
     gold = db.FloatField()
     loot = db.ListField(db.GenericReferenceField)
@@ -15,7 +24,8 @@ class Inventory(db.EmbeddedDocument):
 class Character(db.Document):
     name = db.StringField(required=True)
     level = db.IntField(default=0)
-    clss = db.ReferenceField(Class)
+    stats = db.EmbeddedDocumentField(Stats)
+    class_ = db.ReferenceField(Class, db_field="class")  # `class` is a reserved keyword
     race = db.ReferenceField(Race)
     inventory = db.EmbeddedDocumentField(Inventory)
     created_at = db.DateTimeField(default=datetime.utcnow)

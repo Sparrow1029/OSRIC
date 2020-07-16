@@ -1,7 +1,8 @@
 from flask_restx import fields
 from ..routes import dnd_api as api
+from .spells import spell
 
-
+from .fields import MongoId
 
 restrictions = api.model("Restrictions", {
     "min_str": fields.Integer,
@@ -44,29 +45,18 @@ thief_chance = api.model("ThiefChance", {
     "read_languages": fields.Float,
 })
 
-spell_input = api.model("SpellInput", {
-    "classname": fields.String,
-    "spellname": fields.String(required=True),
-    "level": fields.Integer,
-    "range": fields.String,
-    "duration": fields.String,
-    "aoe": fields.String,
-    "components": fields.List(fields.String),
-    "saving_throw": fields.String(default='None'),
-    "description": fields.String,
-}, mask={"id", "classname"})
 
-spell = api.clone("Spell", spell_input, {
-    "id": MongoId
-})
-
-clss = api.model("Class", {
-    "id": MongoId,
+class_input = api.model("ClassInput", {
     "classname": fields.String,
     "restrictions": fields.Nested(restrictions),
     "abilities": fields.List(fields.Nested(ability)),
     "saving_throws": fields.Raw,
-    "to_hit": fields.Raw, "level_advancement": fields.List(fields.Nested(lvl_adv)),
+    "to_hit": fields.Raw,
+    "level_advancement": fields.List(fields.Nested(lvl_adv)),
     "skill_chance": fields.List(fields.Nested(thief_chance)),
     "spells": fields.List(fields.Nested(spell))
+})
+
+class_ = api.clone("Class", class_input, {
+    "id": MongoId,
 })

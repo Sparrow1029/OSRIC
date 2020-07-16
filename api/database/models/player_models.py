@@ -6,13 +6,8 @@ from .character_models import Character
 
 
 class Player(db.Document):
-    # meta = {
-    #     "indexes": [
-    #         {"fields": ("username", "email"), "unique": True}
-    #     ]
-    # }
     username = db.StringField(unique=True, required=True)  #, unique=True)
-    email = db.EmailField(unique=True, null=True)  #unique_with="username")
+    email = db.EmailField(unique=True)  #unique_with="username")
     real_name = db.StringField(default="Anonymous", null=False)
     password = db.StringField(required=True)
     characters = db.ListField(Character, reverse_delete_rule=db.PULL)

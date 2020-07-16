@@ -15,11 +15,12 @@ def handle_does_not_exist(error):
 
 
 def initialize_routes(api):
-    from .classes import ClassesApi, ClassApi
-    from .spells import SpellsApi, SpellApi
-    # from .player import PlayersApi, PlayerApi
-    # from .auth import SignupApi, LoginApi
+    from .namespaces import (
+        ClassesApi, ClassApi, SpellsApi, SpellApi, SignupApi, LoginApi
+    )
     api.add_resource(SpellsApi)
     api.add_resource(SpellApi)
     api.add_resource(ClassesApi)
     api.add_resource(ClassApi)
+    api.add_resource(SignupApi)
+    api.add_resource(LoginApi)

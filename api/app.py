@@ -14,8 +14,8 @@ app = Flask(__name__)
 
 appdir = os.path.dirname(os.path.abspath(__file__))
 env_file = os.path.join(appdir, ".env")
-# app.config.from_envvar('ENV_FILE_LOCATION')
-app.config["ENV_FILE_LOCATION"] = env_file
+app.config.from_envvar('ENV_FILE_LOCATION')
+
 app.config["MONGODB_SETTINGS"] = {
     "host": "mongodb://localhost/dnd_database"
 }

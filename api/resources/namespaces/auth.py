@@ -3,12 +3,19 @@ from flask_jwt_extended import create_access_token
 from flask_restx import Resource
 import datetime
 
-from database.player_models import Player
+from ...database.models import Player
+from ..routes import dnd_api as api
+from ..api_models import player_input as api_player
+from ..api_models import login
+
+ns = api.namespace("auth", description="Authorization resource endpoint")
 
 
+@ns.route("/signup")
 class SignupApi(Resource):
+    @api.expect(api_player)
     def post(self):
-        body = request.get_json()
+        body = api.payload
         player = Player(**body)
         player.hash_password()
         player.save()
@@ -16,7 +23,9 @@ class SignupApi(Resource):
         return {"id": str(id)}, 200
 
 
+@ns.route("/login")
 class LoginApi(Resource):
+    @api.expect(login, description="Username and password")
     def post(self):
         body = request.get_json()
         player = Player.objects.get(username=body.get("username"))

@@ -2,12 +2,10 @@ from flask import Response, request
 from flask_restx import Resource, abort
 from flask_jwt_extended import jwt_required
 
-from ..database.models import Spell, Class
-# from ..database.class_models import Class
+from ...database.models import Spell, Class
 from bson import ObjectId
-# from mongoengine.queryset.visitor import Q
-from .routes import dnd_api as api
-from .api_models import spell, spell_input
+from ..routes import dnd_api as api
+from ..api_models import spell, spell_input
 
 ns = api.namespace("spells", description="Database - Spells operations")
 
@@ -18,7 +16,7 @@ class SpellsApi(Resource):
     @api.marshal_list_with(spell)
     def get(self):
         return list(Spell.objects())
-        abort(500, "FUCK")
+        abort(500, "Something went horribly wrong.")
 
 
 @ns.route("/<string:id>")

@@ -7,7 +7,7 @@ from flask_jwt_extended import JWTManager
 import click
 
 from .resources.routes import dnd_api, initialize_routes
-from .database.db import db
+from .database import db
 # from .database.initdb import seed_db
 
 app = Flask(__name__)

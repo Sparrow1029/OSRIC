@@ -2,8 +2,8 @@ from flask import Response, request
 from flask_restx import Resource, abort
 from flask_jwt_extended import jwt_required
 
-from ..database.object_models import Spell
-from ..database.class_models import Class
+from ..database.models import Spell, Class
+# from ..database.class_models import Class
 from bson import ObjectId
 # from mongoengine.queryset.visitor import Q
 from .routes import dnd_api as api

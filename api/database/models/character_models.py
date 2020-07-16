@@ -1,5 +1,5 @@
 from datetime import datetime
-from .db import db
+from ..db import db
 from .object_models import Item, Weapon, Armor
 from .class_models import Class, Race
 

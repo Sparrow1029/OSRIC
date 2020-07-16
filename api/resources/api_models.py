@@ -12,7 +12,6 @@ class MongoId(fields.Raw):
 
 
 restrictions = api.model("Restrictions", {
-    # "id": MongoId,
     "min_str": fields.Integer,
     "min_dex": fields.Integer,
     "min_con": fields.Integer,
@@ -29,14 +28,12 @@ restrictions = api.model("Restrictions", {
 })
 
 ability = api.model("Ability", {
-    # "id": MongoId,
     "name": fields.String,
     "level": fields.Integer,
     "description": fields.String
 })
 
 lvl_adv = api.model("LevelAdvancement", {
-    # "id": MongoId,
     "level": fields.Integer,
     "exp_req": fields.Integer,
     "num_hit_dice": fields.Integer,
@@ -44,7 +41,6 @@ lvl_adv = api.model("LevelAdvancement", {
 })
 
 thief_chance = api.model("ThiefChance", {
-    # "id": MongoId,
     "level": fields.Integer,
     "climb_walls": fields.Float,
     "find_traps": fields.Float,

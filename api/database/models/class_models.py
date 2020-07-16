@@ -1,5 +1,4 @@
-# from . import db
-from .db import db
+from ..db import db
 from .object_models import Ability, Spell
 
 

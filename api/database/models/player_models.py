@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask_bcrypt import generate_password_hash, check_password_hash
 
-from .db import db
+from ..db import db
 from .character_models import Character
 
 

@@ -10,7 +10,6 @@ dnd_api = Api(default="dndb", default_label="DnD Database API")
 
 @dnd_api.errorhandler(DoesNotExist)
 def handle_does_not_exist(error):
-    print(type(error))
     return {}, 404
 
 

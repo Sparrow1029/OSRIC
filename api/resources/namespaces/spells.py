@@ -1,7 +1,7 @@
-from flask import Response, request
+from flask import request
 from flask_restx import Resource, abort
-from flask_jwt_extended import jwt_required
 
+from ...core.auth import admin_required
 from ...database.models import Spell, Class
 from bson import ObjectId
 from ..routes import dnd_api as api
@@ -13,7 +13,7 @@ ns = api.namespace("spells", description="Database - Spells operations")
 @ns.route("/")
 class SpellsApi(Resource):
     @api.doc("list_spells")
-    @api.marshal_list_with(spell)
+    @api.marshal_list_with(spell, skip_none=True)
     def get(self):
         return list(Spell.objects())
         abort(500, "Something went horribly wrong.")
@@ -23,6 +23,7 @@ class SpellsApi(Resource):
 @ns.param("id", description="Mongodb ObjectId", _in="query")
 class SpellApi(Resource):
     @api.marshal_with(spell, skip_none=True)
+    @api.doc(responses={200: "OK", 404: "Spell not found"})
     def get(self, id):
         if ObjectId.is_valid(id):
             spell_obj = Spell.objects.get(id=id)
@@ -30,10 +31,10 @@ class SpellApi(Resource):
                 return spell_obj
         abort(400, error="Invalid ObjectId")
 
-    @jwt_required
-    # @admin_reqiured  # <-- TODO: make wrapper that checks jwt_claims for `admin` status
+    @admin_required
     @api.response(204, "Spell deleted")
-    @api.param("Authorization", description="Bearer Token", _in="header")
+    @api.doc(responses={403: "Not Authorized"})
+    @api.param("Authorization", description="Bearer Token", _in="header", required=True)
     def delete(self, id):
         print(request)
         print(id)
@@ -44,20 +45,21 @@ class SpellApi(Resource):
         else:
             abort(400, error="Invalid ObjectId")
 
-    # @jwt_required
+    @admin_required
     @api.expect(spell_input)
-    @api.param("Authorization", description="Bearer Token", _in="header")
-    @api.response(200, "Spell successfully updated")
-    def put(self, id):
+    @api.param("Authorization", description="Bearer Token", _in="header", required=True)
+    @api.doc(responses={403: "Not Authorized", 200: "Spell Updated"})
+    def patch(self, id):
         if ObjectId.is_valid(id):
             obj = Spell.objects.get(id=id)
             obj.modify(**api.payload)
-            return "", 204
+            return {"id": obj.id, "message": "success"}, 204
         abort(400, "bad endpoint", error="Invalid ObjectId")
 
+    @admin_required
     @api.expect(spell_input)
     @api.marshal_list_with(spell, code=201, skip_none=True)
-    @api.response(201, "Spell successfully created")
+    @api.doc(responses={201: "Spell successfully created", 403: "Admins Only"})
     def post(self):
         spell = Spell(**api.payload).save()
         class_to_update = Class.objects.get(classname=api.payload["classname"])

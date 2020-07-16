@@ -36,7 +36,7 @@ class Armor(db.Document):
 
 class Ability(db.EmbeddedDocument):
     name = db.StringField(required=True)
-    level = db.IntField(required=True)
+    level = db.IntField()
     description = db.StringField(required=True)
 
 

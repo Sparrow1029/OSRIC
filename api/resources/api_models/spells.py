@@ -13,7 +13,8 @@ spell_input = api.model("SpellInput", {
     "components": fields.List(fields.String),
     "saving_throw": fields.String(default='None'),
     "description": fields.String,
-}, mask={"id", "classname"})
+    "embedded_tables": fields.List(fields.Raw)
+})  # , mask="{id,spellname,classname}")
 
 spell = api.clone("Spell", spell_input, {
     "id": MongoId

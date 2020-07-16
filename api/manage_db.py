@@ -173,10 +173,14 @@ def create_classes():
 
 def create_races():
     for race in races:
+        if race["abilities"]:
+            race_abilities = [Ability(name=k, description=v) for k, v in race["abilities"].items()]
+        else:
+            race_abilities = []
         db_race_obj = Race(
             name=race["name"],
             base_stat_mods=race["base_stat_mods"],
-            abilities=race["abilities"],
+            abilities=race_abilities,
             bonuses=race["bonuses"],
             languages=race["languages"],
             max_addl_languages=race["max_addl_languages"],

@@ -12,7 +12,7 @@ DWARF = {
         "-4 penalty to any attacks made against the dwarf by giants, ogres, ogre mages, titans and trolls."
     ],
     "abilities": {
-        "infravision": 60,
+        "infravision": "60 ft",
         "other": "Within 10 ft, a dwarf can detect certain facts concerning engineering, "
         "stonework, etc. Although no significant time is required, the character must deliberately "
         "observe his or her surroundings (i.e., the player must state that the dwarf is using this "
@@ -55,7 +55,7 @@ ELF = {
     "abilities": {
         "any_pulled_bow": "+1 to hit",
         "longsword_and_short_sword": "+1 to hit",
-        "infravision": 60,
+        "infravision": "60 ft",
         "detect_secret_doors": "1 in 6 chance to notice secret doors when passing within 10 ft, "
         "2 in 6 chance to discover secret doors when searching, and 3 in 6 chance to discover "
         "concealed doors when searching.",
@@ -101,7 +101,7 @@ GNOME = {
     "languages": ["common", "dwarfish", "gnomish", "goblin", "halfling", "kobold"],
     "max_addl_languages": 2,
     "abilities": {
-        "infravision": 60,
+        "infravision": "60 ft",
         "speak_with_animals": "Gnomes may communicate with any normal burrowing animal.",
         "other": "Within 10 ft, a gnome can detect certain facts concerning engineering, stonework, etc. Although no significant time is required, the character must deliberately observe his or her surroundings (i.e., the player must state that the dwarf is using this particular talent in order to gain information).\n- Detect the existence of slopes or grades: 80%\n- Detect the existence of unsafe wall, ceiling, floor: 70%\n- Determine depth underground: 60%\n- Determine direction of north underground: 50%"
     },
@@ -137,7 +137,7 @@ HALF_ELF = {
     ],
     "abilities": {
         "secret_doors": "When searching, a half-elf character can detect secret doors on a 2 in 6 and concealed doors on a 3 in 6. When passing within 10ft of a concealed door, a half-elf will notice it on a 1 in 6.",
-        "infravision": 60,
+        "infravision": "60 ft",
     },
     "languages": ["common", "elven", "gnoll", "gnome", "goblin", "halfling", "hobgoblin", "orcish"],
     "max_addl_languages": 0,
@@ -178,7 +178,7 @@ HALFLING = {
         "or more than 90 ft in advance of others, or with a party entirely consisting of elves "
         "and/or halflings.  If a door must be opened (or some similar task), "
         "the chance of surprise drops to 2 in 6.",
-        "infravision": 60,
+        "infravision": "60 ft",
     },
     "languages": ["common", "dwarfish", "gnome", "goblin", "halfling", "orcish"],
     "max_addl_languages": 2,
@@ -210,7 +210,7 @@ HALF_ORC = {
     },
     "bonuses": [],
     "abilities": {
-        "infravision": 60,
+        "infravision": "60 ft",
     },
     "languages": ["common", "orcish"],
     "max_addl_languages": 2,

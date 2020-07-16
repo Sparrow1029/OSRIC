@@ -3,7 +3,8 @@ import os
 from flask import Flask
 from flask_bcrypt import Bcrypt
 # from flask_restx import Api
-from flask_jwt_extended import JWTManager
+# from flask_jwt_extended import JWTManager
+from .core.auth import jwt
 import click
 
 from .resources.routes import dnd_api, initialize_routes
@@ -12,8 +13,8 @@ from .database import db
 
 app = Flask(__name__)
 
-appdir = os.path.dirname(os.path.abspath(__file__))
-env_file = os.path.join(appdir, ".env")
+# appdir = os.path.dirname(os.path.abspath(__file__))
+# env_file = os.path.join(appdir, ".env")
 app.config.from_envvar('ENV_FILE_LOCATION')
 
 app.config["MONGODB_SETTINGS"] = {
@@ -24,11 +25,13 @@ app.config["ERROR_404_HELP"] = False
 
 # api = Api(app)
 bcrypt = Bcrypt(app)
-jwt = JWTManager(app)
+# jwt = JWTManager(app)
+jwt.init_app(app)
 
 dnd_api.init_app(app)
 initialize_routes(dnd_api)
 db.init_app(app)
+
 
 @app.cli.command()
 def initdb():

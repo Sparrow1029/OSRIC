@@ -1,6 +1,6 @@
 from datetime import datetime
 from ..db import db
-from .object_models import Item, Weapon, Armor
+from .object_models import Item, Weapon, Armor, Spell, Ability
 from .class_models import Class, Race
 
 
@@ -16,9 +16,13 @@ class Stats(db.EmbeddedDocument):
 class Inventory(db.EmbeddedDocument):
     gold = db.FloatField()
     loot = db.ListField(db.GenericReferenceField)
-    equipped_armor = db.ListField(db.ReferenceField(Armor))
-    equipped_weapons = db.ListField(db.ReferenceField(Weapon))
-    equipment = db.ListField(db.ReferenceField(Item))
+    armor = db.ListField(db.ReferenceField(Armor))
+    weapons = db.ListField(db.ReferenceField(Weapon))
+    items = db.ListField(db.ReferenceField(Item))
+
+
+class Equipment(db.EmbeddedDocument):
+    equipped_weapons = db.ListField(db.GenericReferenceField)
 
 
 class ThiefChance(db.EmbeddedDocument):
@@ -33,16 +37,34 @@ class ThiefChance(db.EmbeddedDocument):
     read_languages = db.FloatField()
 
 
+class MemSpell(db.EmbeddedDocument):
+    spells = db.ReferenceField(Spell)
+    num_remaining = db.IntField()
+
+
 class Character(db.Document):
     name = db.StringField(required=True)
-    level = db.IntField(default=0)
+    level = db.IntField(default=1)
     stats = db.EmbeddedDocumentField(Stats)
     class_ = db.ReferenceField(Class, db_field="class")  # `class` is a reserved keyword
     race = db.ReferenceField(Race)
-    inventory = db.EmbeddedDocumentField(Inventory)
+    abilities = db.ListField(Ability)
+
     created_at = db.DateTimeField(default=datetime.utcnow)
+    public = db.BooleanField(default=True)
     owner = db.ReferenceField('Player')
+
+    cur_hp = db.IntField()
+    max_hp = db.IntField()
+    alive = db.BooleanField()
+    status_effects = db.ListField(db.DictField())
+    inventory = db.EmbeddedDocumentField(Inventory)
 
     def determine_thief_chance():
         # skill_chance = db.EmbeddedDocumentListField(ThiefChance)
         pass
+
+    def _set_init_abilities(self):
+        race_abls = Race.objects.get(id=self.race.id).abilities
+        clss_abls = Class.objects.get(id=self.class_.id).abilities
+        self.abilities = race_abls + clss_abls

@@ -35,7 +35,7 @@ class Race(db.Document):
     meta = {"collection": "races"}
     name = db.StringField(unique=True, required=True)
     base_stat_mods = db.DictField()
-    abilities = db.DictField()
+    abilities = db.EmbeddedDocumentListField(Ability)
     bonuses = db.ListField(db.StringField())
     languages = db.ListField(db.StringField())
     max_addl_languages = db.IntField(default=0)

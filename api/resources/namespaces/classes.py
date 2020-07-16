@@ -15,7 +15,6 @@ ns = api.namespace("classes", description="Database classes operations")
 @ns.route("/")
 class ClassesApi(Resource):
     @api.marshal_list_with(class_)
-    @api.param("Authorization", description="Bearer Token", _in="header")
     def get(self):
         print(get_jwt_claims())
         return list(Class.objects())

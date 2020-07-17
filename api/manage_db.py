@@ -19,7 +19,7 @@ classnames = ["druid", "thief", "ranger", "cleric", "fighter", "paladin", "assas
 races = [HUMAN, HALFLING, HALF_ELF, HALF_ORC, ELF, GNOME, DWARF]
 
 working_dir = os.path.dirname(os.path.abspath(__file__))
-abilities_file = os.path.join(working_dir, "database/seed_data/all_spells.csv")
+abilities_file = os.path.join(working_dir, "database/seed_data/class_abilities.csv")
 spell_file = os.path.join(working_dir, "database/seed_data/all_spells.csv")
 
 
@@ -174,7 +174,7 @@ def create_classes():
 def create_races():
     for race in races:
         if race["abilities"]:
-            race_abilities = [Ability(name=k, description=v) for k, v in race["abilities"].items()]
+            race_abilities = [Ability(name=k, description=v, level=1) for k, v in race["abilities"].items()]
         else:
             race_abilities = []
         db_race_obj = Race(

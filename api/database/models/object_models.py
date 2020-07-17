@@ -41,8 +41,13 @@ class Ability(db.EmbeddedDocument):
 
 
 class Spell(db.Document):
-    meta = {"collection": "spells"}
-    classname = db.StringField()
+    meta = {
+        "collection": "spells",
+        "indexes": [
+            {"fields": ("classname", "spellname", "level"), "unique": True}
+        ]
+    }
+    classname = db.StringField(required=True)
     spellname = db.StringField(required=True)
     level = db.IntField()
     range = db.StringField()

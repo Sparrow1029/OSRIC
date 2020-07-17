@@ -37,8 +37,8 @@ class ThiefChance(db.EmbeddedDocument):
     read_languages = db.FloatField()
 
 
-class MemSpell(db.EmbeddedDocument):
-    spells = db.ReferenceField(Spell)
+class MemorizedSpells(db.EmbeddedDocument):
+    spells = db.ListField(db.ReferenceField(Spell))
     num_remaining = db.IntField()
 
 

@@ -1,11 +1,12 @@
 import os, re
 from csv import DictReader
 from collections import defaultdict
+import json
 
 from database import db
 from database.models import (
-    Class, Race, ClassRestrictions, Ability, Spell,  # LevelAdvancement, SpellsByLevel,
-    # Item, Weapon, Armor
+    Class, Race, ClassRestrictions, Ability, Spell, LevelAdvancement, SpellsByLevel,
+    Item, Weapon, Armor
 )
 from database.seed_data import (
     RESTRICTIONS_DICT, SAVING_THROWS_DICT, TO_HIT_DICT,
@@ -18,9 +19,10 @@ classnames = ["druid", "thief", "ranger", "cleric", "fighter", "paladin", "assas
               "illusionist"]
 races = [HUMAN, HALFLING, HALF_ELF, HALF_ORC, ELF, GNOME, DWARF]
 
-working_dir = os.path.dirname(os.path.abspath(__file__))
-abilities_file = os.path.join(working_dir, "database/seed_data/all_spells.csv")
-spell_file = os.path.join(working_dir, "database/seed_data/all_spells.csv")
+data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "database/seed_data/")
+abilities_file = os.path.join(data_dir, "class_abilities.csv")
+spell_file = os.path.join(data_dir, "all_spells.csv")
+item_dir = os.path.join(data_dir, "equipment_tables")
 
 
 class EmbeddedTable:
@@ -202,9 +204,38 @@ def link_spells():
             class_obj.save()
 
 
+def insert_items():
+    for csv_file in os.listdir(item_dir):
+        fpath = os.path.join(item_dir, csv_file)
+        reader = DictReader(open(fpath))
+        headers = reader.fieldnames
+        if headers[0] == "weapon":
+            headers[0] = "name"
+            for row in reader:
+                attrs = {header: row[header].lower() for header in headers}
+                json_str = json.dumps(attrs)
+                weapon_doc = Weapon.from_json(json_str)
+                weapon_doc.save()
+        elif headers[0] == "item":
+            headers[0] = "name"
+            for row in reader:
+                attrs = {header: row[header].lower() for header in headers}
+                json_str = json.dumps(attrs)
+                item_doc = Item.from_json(json_str)
+                item_doc.save()
+        elif headers[0] == "type":
+            headers[0] = "name"
+            for row in reader:
+                attrs = {header: row[header].lower() for header in headers}
+                json_str = json.dumps(attrs)
+                armor_doc = Armor.from_json(json_str)
+                armor_doc.save()
+
+
 if __name__ == "__main__":
     pass
-    parse_spells(spell_file)
-    create_classes()
+    # parse_spells(spell_file)
+    # create_classes()
     create_races()
-    link_spells()
+    # link_spells()
+    # insert_items()

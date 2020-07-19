@@ -14,7 +14,7 @@ class Item(db.Document):
 class Weapon(db.Document):
     meta = {"collection": "weapons"}
     name = db.StringField(required=True)
-    category = db.StringField(required=True)  # missile or melee or magic?
+    category = db.StringField(required=True, unique_with="name")
     dmg_sm_md = db.StringField()
     dmg_lg = db.StringField()
     encumbrance = db.FloatField()
@@ -24,7 +24,7 @@ class Weapon(db.Document):
 
     # missile weapons only
     rate_of_fire = db.FloatField(null=True)
-    rng = db.IntField(null=True)
+    rng = db.IntField(null=True, db_field="range")  # range is keyword
 
 
 class Armor(db.Document):

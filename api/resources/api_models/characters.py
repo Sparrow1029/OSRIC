@@ -4,7 +4,7 @@ from .fields import MongoId
 from ..routes import dnd_api as api
 from .spells import spell
 from .classes import class_, race
-from .players import player
+# from .players import player
 from .objects import item, weapon, armor, item_inventory, weapon_inventory, armor_inventory
 
 stats = api.model("Stats", {
@@ -24,16 +24,17 @@ ability = api.model("Ability", {
 
 inventory = api.model("Inventory", {
     "gold": fields.Float,
-    "armor": fields.List(armor_inventory),
-    "weapons": fields.List(weapon_inventory),
-    "items": fields.List(item_inventory),
+    "armor": fields.List(fields.Nested(armor_inventory)),
+    "weapons": fields.List(fields.Nested(weapon_inventory)),
+    "items": fields.List(fields.Nested(item_inventory)),
 })
 
 character_input = api.model("CharacterInput", {
     "name": fields.String(required=True),
-    "stats": fields.Nested(stats),
-    "class_": fields.Nested(class_),
-    "race": MongoId,
+    "base_stats": fields.Nested(stats),
+    "class_": fields.String,
+    "race": fields.String,
+    "gender": fields.String
 })
 
 equipment = api.model("Equipment", {
@@ -49,7 +50,6 @@ memorized_spell = api.clone("MemorizedSpells", spell, {
 character = api.clone("Character", character_input, {
     "id": MongoId,
     "level": fields.Integer,
-    "base_stats": fields.Nested(stats),
     "cur_stats": fields.Nested(stats),
     "class": fields.Nested(class_),
     "race": fields.Nested(race),
@@ -58,8 +58,9 @@ character = api.clone("Character", character_input, {
 
     "cur_hp": fields.Integer,
     "max_hp": fields.Integer,
+    "exp": fields.Integer,
     "alive": fields.Boolean,
-    "status_effects": fields.List(fields.Raw),
+    "status_effects": fields.Raw,
     "inventory": fields.Nested(inventory),
     "equipped": fields.Nested(equipment),
     "cur_spells": fields.List(fields.Nested(memorized_spell)),
@@ -67,5 +68,5 @@ character = api.clone("Character", character_input, {
 
     "created_at": fields.DateTime,
     "public": fields.Boolean(description="Is this character visible to all users"),
-    "owner": fields.Nested(player)
+    "owner": MongoId
 })

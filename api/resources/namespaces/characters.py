@@ -2,7 +2,7 @@ from flask_restx import Resource, abort
 from flask_jwt_extended import jwt_required, get_jwt_claims, get_jwt_identity
 
 from ...core.auth import admin_required
-from ...database.models import Character, Player
+from ...database.models import Character, Player, Race, Class
 from bson import ObjectId
 from ..routes import dnd_api as api
 from ..api_models import spell, character, character_input
@@ -27,8 +27,20 @@ class PlayerCharactersApi(Resource):
 
 @ns.route("/create")
 class CreateCharacter(Resource):
-    @jwt_required
+    # @jwt_required
+    @api.expect(character_input)
+    @api.param("Authorization", description="Bearer <JWT>", _in="header", required=True)
     def post(self):
-        player_id = get_jwt_identity()
-        new_char = Character(**api.payload)
-        print()
+        # player_id = get_jwt_identity()
+        player_id = "5f0fcac712ec4a03a9658e10"
+        payload = api.payload
+        this_class = Class.objects.get(classname=payload["class_"])
+        this_race = Race.objects.get(name=payload["race"])
+        payload["class_"] = str(this_class.id)
+        payload["race"] = str(this_race.id)
+        print(payload)
+        new_char = Character(**payload)
+        new_char.link_player(player_id)
+        print(new_char)
+        new_char.save()
+        return 200, "Success"

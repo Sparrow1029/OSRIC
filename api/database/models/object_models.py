@@ -7,7 +7,8 @@ class Item(db.Document):
     name = db.StringField(required=True)
     weight = db.FloatField()
     cost = db.FloatField()
-    special = db.StringField()
+    description = db.StringField()
+    magic = db.BooleanField(default=False)
 
 
 class Weapon(db.Document):
@@ -18,7 +19,8 @@ class Weapon(db.Document):
     dmg_lg = db.StringField()
     encumbrance = db.FloatField()
     cost = db.FloatField()
-    magic = db.StringField()
+    magic = db.BooleanField(default=False)
+    description = db.StringField()
 
     # missile weapons only
     rate_of_fire = db.FloatField(null=True)
@@ -27,11 +29,13 @@ class Weapon(db.Document):
 
 class Armor(db.Document):
     meta = {"collection": "armor"}
-    material = db.StringField()
+    name = db.StringField(required=True)
     encumbrance = db.IntField()
     max_move = db.IntField()
     ac = db.IntField()
     cost = db.FloatField()
+    magic = db.BooleanField(default=False)
+    description = db.StringField()
 
 
 class Ability(db.EmbeddedDocument):

@@ -3,7 +3,9 @@ from .fields import MongoId
 
 from ..routes import dnd_api as api
 from .spells import spell
-from .classes import class_
+from .classes import class_, race
+from .players import player
+from .objects import item, weapon, armor, item_inventory, weapon_inventory, armor_inventory
 
 stats = api.model("Stats", {
     "str": fields.Integer,
@@ -22,10 +24,9 @@ ability = api.model("Ability", {
 
 inventory = api.model("Inventory", {
     "gold": fields.Float,
-    "loot": fields.List(fields.Raw),
-    "armor": fields.List(fields.Raw),
-    "weapons": fields.List(fields.Raw),
-    "items": fields.List(fields.Raw),  # Items?
+    "armor": fields.List(armor_inventory),
+    "weapons": fields.List(weapon_inventory),
+    "items": fields.List(item_inventory),
 })
 
 character_input = api.model("CharacterInput", {
@@ -35,19 +36,36 @@ character_input = api.model("CharacterInput", {
     "race": MongoId,
 })
 
+equipment = api.model("Equipment", {
+    "armor": fields.List(fields.Nested(armor)),
+    "weapons": fields.List(fields.Nested(weapon)),
+    "items": fields.List(fields.Nested(item))
+})
+
+memorized_spell = api.clone("MemorizedSpells", spell, {
+    "num_remaining": fields.Integer
+})
+
 character = api.clone("Character", character_input, {
     "id": MongoId,
     "level": fields.Integer,
+    "base_stats": fields.Nested(stats),
+    "cur_stats": fields.Nested(stats),
+    "class": fields.Nested(class_),
+    "race": fields.Nested(race),
     "abilities": fields.List(fields.Nested(ability)),
+    "gender": fields.String,
 
-    "gold": fields.Float,
     "cur_hp": fields.Integer,
-    "cur_status": fields.List(fields.String),
-    "cur_spells": fields.List(fields.Nested(spell)),
+    "max_hp": fields.Integer,
+    "alive": fields.Boolean,
+    "status_effects": fields.List(fields.Raw),
     "inventory": fields.Nested(inventory),
-    "equipment": fields.Raw,
+    "equipped": fields.Nested(equipment),
+    "cur_spells": fields.List(fields.Nested(memorized_spell)),
+    "skill_chance": fields.Raw,
 
-    "public": fields.Boolean(description="Is this character visible to all users"),
     "created_at": fields.DateTime,
-    "owner": MongoId
+    "public": fields.Boolean(description="Is this character visible to all users"),
+    "owner": fields.Nested(player)
 })

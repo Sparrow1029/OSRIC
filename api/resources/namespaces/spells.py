@@ -1,6 +1,6 @@
-from flask import request
 from flask_restx import Resource, abort
 
+# from flask_jwt_extended import get_jwt_claims, get_jwt_identity
 from ...core.auth import admin_required
 from ...database.models import Spell, Class
 from bson import ObjectId
@@ -34,10 +34,8 @@ class SpellApi(Resource):
     @admin_required
     @api.response(204, "Spell deleted")
     @api.doc(responses={403: "Not Authorized"})
-    @api.param("Authorization", description="Bearer Token", _in="header", required=True)
+    @api.param("Authorization", description="Bearer <JWT>", _in="header", required=True)
     def delete(self, id):
-        print(request)
-        print(id)
         if ObjectId.is_valid(id):
             spell_obj = Spell.objects.get(id=id)
             spell_obj.delete()
@@ -47,7 +45,7 @@ class SpellApi(Resource):
 
     @admin_required
     @api.expect(spell_input)
-    @api.param("Authorization", description="Bearer Token", _in="header", required=True)
+    @api.param("Authorization", description="Bearer <JWT>", _in="header", required=True)
     @api.doc(responses={403: "Not Authorized", 200: "Spell Updated"})
     def patch(self, id):
         if ObjectId.is_valid(id):
@@ -59,6 +57,7 @@ class SpellApi(Resource):
     @admin_required
     @api.expect(spell_input)
     @api.marshal_list_with(spell, code=201, skip_none=True)
+    @api.param("Authorization", description="Bearer <JWT>", _in="header", required=True)
     @api.doc(responses={201: "Spell successfully created", 403: "Admins Only"})
     def post(self):
         spell = Spell(**api.payload).save()

@@ -1,7 +1,7 @@
 item,weight,cost
 "ale, pint",1,0.1
-backpack (empty),10,2
-barrel (empty),30,2
+backpack,10,2
+barrel,30,2
 bedroll,5,0.2
 bell,0,1
 belt,0,0.5
@@ -10,7 +10,7 @@ block and tackle,5,5
 "boots, soft",3,1
 "boots, heavy",5,2
 "bottle (wine), glass",1,2
-box (empty),15,1
+box,15,1
 "bracer, leather (archery)",1,0.8
 caltrops,2,1
 "candle, beeswax",0,0.01
@@ -18,7 +18,7 @@ canvas (per sq. yard),1,0.1
 caludron and tripod,15,2
 chain (per 10 ft),10,30
 "chalk, piece",0,0.01
-chest (empty),25,2
+chest,25,2
 cloak,2,0.03
 copper piece,0.1,0.01
 crowbar,5,2
@@ -45,9 +45,9 @@ Holy symbol (wooden),1,0.6
 "Horse, nag",0,8
 "horse, palfrey",0,40
 "horse, rouncey",0,25
-"horse, war, heavy",0,500
-"horse, war, light",0,200
-"horse, war, medium",0,350
+"warhorse, heavy",0,500
+"warhorse, light",0,200
+"warhorse, medium",0,350
 hose,0,1
 "iron spikes, dozen",0,1
 ladder (per 10 ft),20,0.5
@@ -70,13 +70,13 @@ platinum piece,0.1,5
 pole (per 10 ft),8,0.2
 pony,0,12
 "pot, iron",10,0.5
-"pouch, belt, large (empty)",2,0.4
-"pouch, belt, small (empty)",1,0.2
+"pouch, belt, large",2,0.4
+"pouch, belt, small",1,0.2
 quill (pen),0,0.1
-"quiver (holds 12 arrows, empty)",1,0.25
-"quiver (holds 24 arrows, empty)",2,1
-"quiver (holds 12 bolts, empty)",1,0.12
-"quiver (holds 24 bolts, empty)",2,3
+quiver (holds 12 arrows),1,0.25
+quiver (holds 24 arrows),2,1
+quiver (holds 12 bolts),1,0.12
+quiver (holds 24 bolts),2,3
 "rations (standard, per day)",2,2
 "rations (trail, per day)",1,6
 "reins, bit and bridle",5,2
@@ -84,10 +84,10 @@ quill (pen),0,0.1
 "robe, silk",1,60
 "rope, hemp (per 50 ft)",10,1
 "rope, silk (per 50 ft)",5,10
-"sack, small (empty)",0.5,0.09
-"sack, large (empty)",1,0.15
+"sack, small",0.5,0.09
+"sack, large",1,0.15
 saddle and stirrups,20,10
-satchel (empty),5,1
+satchel,5,1
 "scrollcase, bone",0.5,4
 "scrollcase, leather",0.5,1
 "shoes, common",1,0.5
@@ -108,6 +108,6 @@ vellum (per sheet),0,0.3
 "wagon, small",0,100
 "wagon, large",0,250
 "water, holy (per vial)",0.5,25
-"waterskin (3 pint, empty)",1,1
+waterskin (3 pint),1,1
 whetstone,0.5,0.02
 "wine, pint",1,0.5

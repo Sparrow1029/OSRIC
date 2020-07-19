@@ -5,7 +5,13 @@ from mongoengine.errors import DoesNotExist
 # from .player import PlayersApi, PlayerApi
 # from .auth import SignupApi, LoginApi
 
-dnd_api = Api(default="dndb", default_label="DnD Database API")
+dnd_api = Api(
+    title="D&D Database API",
+    version="1.0",
+    default="dndb",
+    ordered=True,
+    prefix="/api"
+)
 
 
 @dnd_api.errorhandler(DoesNotExist)

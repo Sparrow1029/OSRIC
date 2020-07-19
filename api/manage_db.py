@@ -176,7 +176,7 @@ def create_classes():
 def create_races():
     for race in races:
         if race["abilities"]:
-            race_abilities = [Ability(name=k, description=v) for k, v in race["abilities"].items()]
+            race_abilities = [Ability(name=k, description=v, level=1) for k, v in race["abilities"].items()]
         else:
             race_abilities = []
         db_race_obj = Race(

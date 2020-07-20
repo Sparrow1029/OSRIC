@@ -21,7 +21,6 @@ class SignupApi(Resource):
     def post(self):
         try:
             body = api.payload
-            print(body)
             player = Player(**body)
             player.hash_password()
             player.save()

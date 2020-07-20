@@ -24,7 +24,7 @@ def delete_character(char_id, player_token):
     return requests.delete(delete_url.format(char_id), headers=headers, verify=False)
 
 
-def test_delete_positive():
+def test_delete_char_db_pull():
     # Positive
     characters = create_characters()
     for char in list(db.characters.find()):

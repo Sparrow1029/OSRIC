@@ -1,8 +1,12 @@
-import os, re
+import os, re, sys
 from csv import DictReader
 from collections import defaultdict
 import json
 
+from mongoengine import connect
+from mongoengine.connection import _get_db()
+
+from .tests import create_characters, create_users, get_jwt
 from database import db
 from database.models import (
     Class, Race, ClassRestrictions, Ability, Spell, LevelAdvancement, SpellsByLevel,
@@ -233,9 +237,16 @@ def insert_items():
 
 
 if __name__ == "__main__":
-    pass
-    parse_spells(spell_file)
-    create_classes()
-    create_races()
-    link_spells()
-    insert_items()
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "seed_db":
+            parse_spells(spell_file)
+            create_classes()
+            create_races()
+            link_spells()
+            insert_items()
+            create_users()
+            create_characters()
+        if sys.argv[1] == "drop_db":
+            connect("dnd_database")
+            db = _get_db()
+            db.connection.drop_database("dnd_database")

@@ -49,6 +49,7 @@ memorized_spell = api.clone("MemSpells", spell, {
 
 ref = api.model("Ref", {
     "name": fields.String,
+    "classname": fields.String,
     "username": fields.String,
     "id": MongoId
 })
@@ -73,7 +74,8 @@ character = api.model("Character", {
     "status_effects": fields.Raw,
     "inventory": fields.Nested(inventory),
     "equipped": fields.Nested(equipment),
-    "cur_spells": fields.List(fields.Nested(memorized_spell)),
+    "available_spells": fields.List(fields.Nested(ref, skip_none=True)),
+    "cur_spells": fields.List(fields.Nested(memorized_spell, skip_none=True)),
     "skill_chance": fields.Raw,
 
     "created_at": fields.DateTime,

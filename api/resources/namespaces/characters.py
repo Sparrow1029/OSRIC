@@ -16,8 +16,12 @@ class CharactersApi(Resource):
     @jwt_required
     @api.doc(responses={500: "Something went wrong", 200: "Success"})
     @api.param("player_id", description="Player MongoId")
+    @api.param("Authorization", description="Bearer <JWT>", _in="header", required=True)
     @api.marshal_list_with(character, skip_none=True)
     def get(self):
+        player_id = request.args.get("player_id")
+        if player_id:
+            return list(char for char in Character.objects.filter(public=True, owner=ObjectId(player_id)))
         return list(char for char in Character.objects.filter(public=True))
 
 

@@ -25,7 +25,7 @@ class Character(db.Document):
     status_effects = db.DictField()
     inventory = db.EmbeddedDocumentField(Inventory, null=False, default=Inventory())
     equipped = db.EmbeddedDocumentField(Equipment)
-    available_spells = db.ListField(db.LazyReferenceField(Spell))
+    available_spells = db.ListField(db.ReferenceField(Spell))
     cur_spells = db.EmbeddedDocumentListField(MemSpell)
     skill_chance = db.EmbeddedDocumentField(ThiefChance)
 

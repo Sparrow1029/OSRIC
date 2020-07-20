@@ -143,8 +143,8 @@ def parse_class_abilities(csv_file):
 
 def create_classes():
     abilities = parse_class_abilities(abilities_file)
-    for classname in classnames:
-        r = RESTRICTIONS_DICT[classname]
+    for name in classnames:
+        r = RESTRICTIONS_DICT[name]
         restrictions = ClassRestrictions(
             min_str=r["min_str"],
             min_dex=r["min_dex"],
@@ -161,14 +161,14 @@ def create_classes():
         )
         class_abilities = [
             Ability(name=a["ability"], level=a["level"], description=a["description"])
-            for a in abilities[classname]
+            for a in abilities[name]
         ]
         db_class_obj = Class(
-            classname=classname,
+            name=name,
             restrictions=restrictions,
             abilities=class_abilities,
-            saving_throws=SAVING_THROWS_DICT[classname],
-            to_hit=TO_HIT_DICT[classname],
+            saving_throws=SAVING_THROWS_DICT[name],
+            to_hit=TO_HIT_DICT[name],
         )
         db_class_obj.save()
 
@@ -199,7 +199,7 @@ def link_spells():
     for classname in classnames:
         spell_objs = Spell.objects.filter(classname=classname)
         if spell_objs:
-            class_obj = Class.objects.get(classname=classname)
+            class_obj = Class.objects.get(name=classname)
             class_obj.spells.extend([spell.id for spell in spell_objs])
             class_obj.save()
 
@@ -234,8 +234,8 @@ def insert_items():
 
 if __name__ == "__main__":
     pass
-    # parse_spells(spell_file)
-    # create_classes()
+    parse_spells(spell_file)
+    create_classes()
     create_races()
-    # link_spells()
-    # insert_items()
+    link_spells()
+    insert_items()

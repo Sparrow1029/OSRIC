@@ -9,7 +9,7 @@ dnd_api = Api(
     title="D&D Database API",
     version="1.0",
     default="dndb",
-    ordered=True,
+    # ordered=True,
     prefix="/api"
 )
 
@@ -22,7 +22,7 @@ def handle_does_not_exist(error):
 def initialize_routes(api):
     from .namespaces import (
         ClassesApi, ClassApi, SpellsApi, SpellApi, SignupApi, LoginApi, CharactersApi,
-        CreateCharacter,
+        CreateCharacter, DeleteCharacter
     )
     api.add_resource(SpellsApi)
     api.add_resource(SpellApi)
@@ -32,3 +32,4 @@ def initialize_routes(api):
     api.add_resource(LoginApi)
     api.add_resource(CharactersApi)
     api.add_resource(CreateCharacter)
+    api.add_resource(DeleteCharacter)

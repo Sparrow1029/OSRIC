@@ -61,7 +61,7 @@ class SpellApi(Resource):
     @api.doc(responses={201: "Spell successfully created", 403: "Admins Only"})
     def post(self):
         spell = Spell(**api.payload).save()
-        class_to_update = Class.objects.get(classname=api.payload["classname"])
+        class_to_update = Class.objects.get(name=api.payload["classname"])
         class_to_update.modify(push__spells=spell.id)
         return {"id": str(spell.id)}, 201
         abort(500, "crap it all went sideways")

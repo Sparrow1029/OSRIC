@@ -7,7 +7,7 @@ from .classes import class_, race
 # from .players import player
 from .objects import item, weapon, armor, item_inventory, weapon_inventory, armor_inventory
 
-stats = api.model("Stats", {
+stats = api.model("StatsModel", {
     "str": fields.Integer,
     "con": fields.Integer,
     "dex": fields.Integer,
@@ -32,8 +32,8 @@ inventory = api.model("Inventory", {
 character_input = api.model("CharacterInput", {
     "name": fields.String(required=True),
     "base_stats": fields.Nested(stats),
-    "class_": fields.String,
-    "race": fields.String,
+    "class": fields.String(attr="classref"),
+    "race": fields.String(attr="raceref"),
     "gender": fields.String
 })
 
@@ -43,16 +43,26 @@ equipment = api.model("Equipment", {
     "items": fields.List(fields.Nested(item))
 })
 
-memorized_spell = api.clone("MemorizedSpells", spell, {
+memorized_spell = api.clone("MemSpells", spell, {
     "num_remaining": fields.Integer
 })
 
-character = api.clone("Character", character_input, {
+ref = api.model("Ref", {
+    "name": fields.String,
+    "username": fields.String,
+    "id": MongoId
+})
+
+character = api.model("Character", {
     "id": MongoId,
+    "name": fields.String,
     "level": fields.Integer,
+    "base_stats": fields.Nested(stats),
     "cur_stats": fields.Nested(stats),
-    "class": fields.Nested(class_),
-    "race": fields.Nested(race),
+    # "classref": fields.Nested(class_, mask="{classref{name,id}}"),
+    "classref": fields.Nested(ref, skip_none=True),
+    # "raceref": fields.Nested(race, mask="{raceref{name,id}}"),
+    "raceref": fields.Nested(ref, skip_none=True),
     "abilities": fields.List(fields.Nested(ability)),
     "gender": fields.String,
 
@@ -68,5 +78,5 @@ character = api.clone("Character", character_input, {
 
     "created_at": fields.DateTime,
     "public": fields.Boolean(description="Is this character visible to all users"),
-    "owner": MongoId
+    "owner": fields.Nested(ref, skip_none=True)
 })

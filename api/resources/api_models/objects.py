@@ -15,7 +15,8 @@ item = api.clone("Item", item_input, {
     "id": MongoId
 })
 
-item_inventory = api.clone("ItemInventory", item, {
+item_inventory = api.clone("ItemInventory", item_input, {
+    "id": MongoId,
     "amount": fields.Integer
 })
 
@@ -33,7 +34,8 @@ armor = api.clone("Armor", armor_input, {
     "id": MongoId
 })
 
-armor_inventory = api.clone("ArmorInventory", armor, {
+armor_inventory = api.clone("ArmorInventory", armor_input, {
+    "id": MongoId,
     "amount": fields.Integer
 })
 
@@ -56,6 +58,7 @@ weapon = api.clone("Weapon", weapon_input, {
 })
 
 
-weapon_inventory = api.clone("WeaponInventory", weapon, {
+weapon_inventory = api.clone("WeaponInventory", weapon_input, {
+    "id": MongoId,
     "amount": fields.Integer
 })

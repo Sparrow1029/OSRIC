@@ -62,7 +62,7 @@ race = api.clone("Race", race_input, {
 })
 
 class_input = api.model("ClassInput", {
-    "classname": fields.String,
+    "name": fields.String,
     "restrictions": fields.Nested(restrictions),
     "abilities": fields.List(fields.Nested(ability)),
     "saving_throws": fields.Raw,

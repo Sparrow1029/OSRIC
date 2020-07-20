@@ -2,7 +2,6 @@ from flask_restx import fields
 from ..routes import dnd_api as api
 
 
-
 restrictions = api.model("Restrictions", {
     "min_str": fields.Integer,
     "min_dex": fields.Integer,

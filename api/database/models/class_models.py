@@ -47,7 +47,7 @@ class Race(db.Document):
 
 class Class(db.Document):
     meta = {"collection": "classes"}
-    classname = db.StringField()
+    name = db.StringField()
     restrictions = db.EmbeddedDocumentField(ClassRestrictions)
     abilities = db.EmbeddedDocumentListField(Ability)
     saving_throws = db.DictField()

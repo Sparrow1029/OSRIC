@@ -49,6 +49,7 @@ memorized_spell = api.clone("MemSpells", spell, {
 
 ref = api.model("Ref", {
     "name": fields.String,
+    "spellname": fields.String,
     "classname": fields.String,
     "username": fields.String,
     "id": MongoId

@@ -4,9 +4,9 @@ from collections import defaultdict
 import json
 
 from mongoengine import connect
-from mongoengine.connection import _get_db()
+from mongoengine.connection import _get_db
 
-from .tests import create_characters, create_users, get_jwt
+from tests import create_characters, create_users, get_jwt
 from database import db
 from database.models import (
     Class, Race, ClassRestrictions, Ability, Spell, LevelAdvancement, SpellsByLevel,
@@ -17,8 +17,6 @@ from database.seed_data import (
     HUMAN, HALFLING, HALF_ELF, HALF_ORC, ELF, GNOME, DWARF
 )
 
-db.connect("dnd_database", host="127.0.0.1", port=27017)
-
 classnames = ["druid", "thief", "ranger", "cleric", "fighter", "paladin", "assassin", "magic_user",
               "illusionist"]
 races = [HUMAN, HALFLING, HALF_ELF, HALF_ORC, ELF, GNOME, DWARF]
@@ -28,6 +26,7 @@ abilities_file = os.path.join(data_dir, "class_abilities.csv")
 spell_file = os.path.join(data_dir, "all_spells.csv")
 item_dir = os.path.join(data_dir, "equipment_tables")
 
+db.connect("dnd_database", host="127.0.0.1", port=27017)
 
 class EmbeddedTable:
     def __init__(self, text):
@@ -237,16 +236,43 @@ def insert_items():
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        if sys.argv[1] == "seed_db":
+    usage = """\
+    usage:
+        python3 manage_db.py [option] [sub-options]
+            seed - create db and insert data from database/seed_data dir
+            # 'seed' sub-options:
+                  all - create characters & players
+                  chars - create characters
+                  players - create players
+
+            get_jwt [username] [password] - get JWT for Swagger API
+
+            drop - drop 'dnd_database'"""
+    if len(sys.argv) == 1:
+        print(usage)
+    elif len(sys.argv) > 1:
+        if sys.argv[1] == "seed":
             parse_spells(spell_file)
             create_classes()
             create_races()
             link_spells()
             insert_items()
-            create_users()
-            create_characters()
-        if sys.argv[1] == "drop_db":
-            connect("dnd_database")
-            db = _get_db()
-            db.connection.drop_database("dnd_database")
+            if len(sys.argv) == 3:
+                if sys.argv[2] == "all":
+                    create_users()
+                    create_characters()
+                elif sys.argv[2] == "players":
+                    create_users()
+                elif sys.argv[2] == "chars":
+                    create_characters()
+        elif sys.argv[1] == "drop":
+            db.get_connection().drop_database('dnd_database')
+            # db.disconnect()
+            # connect("dnd_database")
+            # db.drop_database("dnd_database")
+        elif sys.argv[1] == "get_jwt":
+            if not len(sys.argv) == 4:
+                print(usage)
+            print(get_jwt(sys.argv[2], sys.argv[3]))
+    else:
+        print(usage)

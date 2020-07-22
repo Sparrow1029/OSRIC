@@ -1,5 +1,5 @@
-from flask_restx import fields
 from .fields import MongoId
+from flask_restx import fields
 
 from ..routes import dnd_api as api
 from .spells import spell
@@ -17,9 +17,7 @@ stats = api.model("StatsModel", {
 })
 
 ability = api.model("Ability", {
-    "name": fields.String,
-    "level": fields.Integer,
-    "description": fields.String
+    "name": fields.String, "level": fields.Integer, "description": fields.String
 })
 
 inventory = api.model("Inventory", {
@@ -47,12 +45,13 @@ memorized_spell = api.clone("MemSpells", spell, {
     "num_remaining": fields.Integer
 })
 
-ref = api.model("Ref", {
-    "name": fields.String,
-    "spellname": fields.String,
-    "classname": fields.String,
+player_ref = api.model("PlayerRef", {
+    "id": MongoId,
     "username": fields.String,
-    "id": MongoId
+    "email": fields.String,
+    "real_name": fields.String,
+    "characters": fields.List(MongoId),
+    "created_at": fields.DateTime,
 })
 
 character = api.model("Character", {
@@ -61,10 +60,8 @@ character = api.model("Character", {
     "level": fields.Integer,
     "base_stats": fields.Nested(stats),
     "cur_stats": fields.Nested(stats),
-    # "classref": fields.Nested(class_, mask="{classref{name,id}}"),
-    "classref": fields.Nested(ref, skip_none=True),
-    # "raceref": fields.Nested(race, mask="{raceref{name,id}}"),
-    "raceref": fields.Nested(ref, skip_none=True),
+    "classref": fields.Nested(class_, skip_none=True),
+    "raceref": fields.Nested(race, skip_none=True),
     "abilities": fields.List(fields.Nested(ability)),
     "gender": fields.String,
 
@@ -75,11 +72,11 @@ character = api.model("Character", {
     "status_effects": fields.Raw,
     "inventory": fields.Nested(inventory),
     "equipped": fields.Nested(equipment),
-    "available_spells": fields.List(fields.Nested(ref, skip_none=True)),
+    "available_spells": fields.List(fields.Nested(spell, skip_none=True)),
     "cur_spells": fields.List(fields.Nested(memorized_spell, skip_none=True)),
     "skill_chance": fields.Raw,
 
     "created_at": fields.DateTime,
     "public": fields.Boolean(description="Is this character visible to all users"),
-    "owner": fields.Nested(ref, skip_none=True)
+    "owner": fields.Nested(player_ref, skip_none=True)
 })

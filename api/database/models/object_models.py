@@ -65,7 +65,8 @@ class Spell(db.Document):
 
 
 class Note(db.EmbeddedDocument):
-    # date = db.DateTimeField(default=datetime.utcnow)
+    last_edited = db.DateTimeField(default=datetime.utcnow)
+    editor = db.ReferenceField('Player')
     author = db.ReferenceField('Player')
     title = db.StringField(max_length=32)
     content = db.StringField(required=True)
@@ -73,7 +74,8 @@ class Note(db.EmbeddedDocument):
 
 class Session(db.EmbeddedDocument):
     date = db.DateTimeField(default=datetime.utcnow)
-    notes = db.ListField(db.ObjectIdField())  # Note IDs
+    loot = db.EmbeddedDocumentField('Inventory')
+    notes = db.EmbeddedDocumentListField(Note)
     npcs = db.ListField(db.ObjectIdField())
     monsters = db.ListField(db.ObjectIdField())
 
@@ -82,5 +84,4 @@ class Campaign(db.EmbeddedDocument):
     title = db.StringField(required=True)
     dungeon_master = db.ReferenceField('Player')
     players = db.ListField(db.ReferenceField('Player'))
-    # players = db.ListField(db.ReferenceField(Player))
     sessions = db.EmbeddedDocumentListField(Session)

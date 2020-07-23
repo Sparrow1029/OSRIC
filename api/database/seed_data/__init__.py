@@ -1,2 +1,3 @@
 from .races import HUMAN, HALFLING, HALF_ELF, HALF_ORC, ELF, GNOME, DWARF
 from .class_dicts import RESTRICTIONS_DICT, SAVING_THROWS_DICT, TO_HIT_DICT
+from .thief_adj import THIEF_DEX_ADJ, THIEF_RACE_ADJ

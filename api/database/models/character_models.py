@@ -4,12 +4,12 @@ from .object_models import Item, Weapon, Armor, Spell
 
 
 class Stats(db.EmbeddedDocument):
-    str = db.IntField(required=True)
-    con = db.IntField(required=True)
-    dex = db.IntField(required=True)
-    int = db.IntField(required=True)
-    wis = db.IntField(required=True)
-    cha = db.IntField(required=True)
+    str = db.IntField(min_value=3, max_value=19)
+    con = db.IntField(min_value=3, max_value=19)
+    dex = db.IntField(min_value=3, max_value=19)
+    int = db.IntField(min_value=3, max_value=19)
+    wis = db.IntField(min_value=3, max_value=19)
+    cha = db.IntField(min_value=3, max_value=19)
 
 
 class InventoryItem(db.EmbeddedDocument):

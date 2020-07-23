@@ -22,7 +22,7 @@ def handle_does_not_exist(error):
 def initialize_routes(api):
     from .namespaces import (
         ClassesApi, ClassApi, SpellsApi, SpellApi, SignupApi, LoginApi, CharactersApi,
-        CreateCharacter, DeleteCharacter
+        CreateCharacter, DeleteCharacter, UpdateCharacter
     )
     api.add_resource(SpellsApi)
     api.add_resource(SpellApi)
@@ -33,3 +33,4 @@ def initialize_routes(api):
     api.add_resource(CharactersApi)
     api.add_resource(CreateCharacter)
     api.add_resource(DeleteCharacter)
+    api.add_resource(UpdateCharacter)

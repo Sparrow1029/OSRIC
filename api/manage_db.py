@@ -10,10 +10,10 @@ from tests import create_characters, create_users, get_jwt
 from database import db
 from database.models import (
     Class, Race, ClassRestrictions, Ability, Spell, LevelAdvancement, SpellsByLevel,
-    Item, Weapon, Armor
+    Item, Weapon, Armor, ThiefChance
 )
 from database.seed_data import (
-    RESTRICTIONS_DICT, SAVING_THROWS_DICT, TO_HIT_DICT,
+    RESTRICTIONS_DICT, SAVING_THROWS_DICT, TO_HIT_DICT, THIEF_DEX_ADJ, THIEF_RACE_ADJ,
     HUMAN, HALFLING, HALF_ELF, HALF_ORC, ELF, GNOME, DWARF
 )
 
@@ -25,6 +25,8 @@ data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "database/se
 abilities_file = os.path.join(data_dir, "class_abilities.csv")
 spell_file = os.path.join(data_dir, "all_spells.csv")
 item_dir = os.path.join(data_dir, "equipment_tables")
+lvl_adv_file = os.path.join(data_dir, "level_advancemnt")
+thief_chance_file = os.path.join(data_dir, "thief_chance.csv")
 
 db.connect("dnd_database", host="127.0.0.1", port=27017)
 
@@ -143,6 +145,17 @@ def parse_class_abilities(csv_file):
 
     return abilities_dict
 
+def parse_thief_chance(csv_file):
+    dicts = []
+    with open(csv_file, 'r') as f:
+        reader = DictReader(f)
+        for row in reader:
+            dicts.append({header: row[header] for header in reader.fieldnames})
+    chance_list = [
+        ThiefChance.from_json(json.dumps(d))
+        for d in dicts
+    ]
+    return chance_list
 
 def create_classes():
     abilities = parse_class_abilities(abilities_file)
@@ -166,12 +179,22 @@ def create_classes():
             Ability(name=a["ability"], level=a["level"], description=a["description"])
             for a in abilities[name]
         ]
+        thief_chance = None
+        dex_adj = None
+        if name == "thief":
+            thief_chance = parse_thief_chance(thief_chance_file)
+            dex_adj = [
+                ThiefChance.from_json(json.dumps(d))
+                for d in THIEF_DEX_ADJ
+            ]
         db_class_obj = Class(
             name=name,
             restrictions=restrictions,
             abilities=class_abilities,
             saving_throws=SAVING_THROWS_DICT[name],
             to_hit=TO_HIT_DICT[name],
+            thief_skill_chance=thief_chance,
+            thief_dex_adj=dex_adj
         )
         db_class_obj.save()
 
@@ -182,6 +205,7 @@ def create_races():
             race_abilities = [Ability(name=k, description=v, level=1) for k, v in race["abilities"].items()]
         else:
             race_abilities = []
+        thief_adj = THIEF_RACE_ADJ[race["name"]]
         db_race_obj = Race(
             name=race["name"],
             base_stat_mods=race["base_stat_mods"],
@@ -193,6 +217,7 @@ def create_races():
             starting_age=race["starting_age"],
             score_limits=race["score_limits"],
             movement_rate=race["movement_rate"],
+            thief_skill_adj=thief_adj,
         )
 
         db_race_obj.save()
@@ -234,6 +259,17 @@ def insert_items():
                 armor_doc = Armor.from_json(json_str)
                 armor_doc.save()
 
+def insert_lvl_advancement():
+    adv_dict = {
+        "paladin": defaultdict(defaultdict),
+        "ranger": defaultdict(defaultdict),
+        "cleric": defaultdict(defaultdict),
+    }
+
+    with open(lvl_adv_file, 'r') as f:
+        pass
+
+
 
 if __name__ == "__main__":
     usage = """\
@@ -267,9 +303,6 @@ if __name__ == "__main__":
                     create_characters()
         elif sys.argv[1] == "drop":
             db.get_connection().drop_database('dnd_database')
-            # db.disconnect()
-            # connect("dnd_database")
-            # db.drop_database("dnd_database")
         elif sys.argv[1] == "get_jwt":
             if not len(sys.argv) == 4:
                 print(usage)

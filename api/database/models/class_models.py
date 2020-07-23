@@ -1,5 +1,6 @@
 from ..db import db
 from .object_models import Ability, Spell
+from .character_models import ThiefChance
 
 
 class ClassRestrictions(db.EmbeddedDocument):
@@ -43,6 +44,7 @@ class Race(db.Document):
     starting_age = db.DictField()
     score_limits = db.DictField()
     movement_rate = db.IntField()
+    thief_skill_adj = db.EmbeddedDocumentField(ThiefChance)
 
 
 class Class(db.Document):
@@ -55,3 +57,5 @@ class Class(db.Document):
     level_advancement = db.EmbeddedDocumentListField(LevelAdvancement)
     spells = db.ListField(db.ReferenceField(Spell, reverse_delete_rule=db.PULL))
     spells_by_level = db.EmbeddedDocumentListField(SpellsByLevel)
+    thief_skill_chance = db.EmbeddedDocumentListField(ThiefChance, null=True)
+    thief_dex_adj = db.EmbeddedDocumentListField(ThiefChance, null=True)

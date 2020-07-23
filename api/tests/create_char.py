@@ -5,7 +5,7 @@ import copy
 base_url = "http://localhost:5000/api"
 
 login_url = base_url + "/auth/login"
-char_url = base_url + "/characters/create"
+char_url = base_url + "/character/create"
 headers = {
     "Content-Type": "application/json",
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/537.36 (KHTML,"
@@ -74,7 +74,8 @@ def create_characters():
     payload = json.dumps(test_char1)
     r = requests.post(char_url, data=payload, headers=headers1)
     print(r.status_code)
-    print(r.json())
+    # print(r.json())
+    print(r.text)
     char_ids["sparrow"]["id"] = r.json()["id"]
 
     print("\nCREATING KORDRIDA")

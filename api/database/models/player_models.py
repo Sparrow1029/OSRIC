@@ -27,39 +27,12 @@ class Character(db.Document):
     equipped = db.EmbeddedDocumentField(Equipment)
     available_spells = db.ListField(db.ReferenceField(Spell))
     cur_spells = db.EmbeddedDocumentListField(MemSpell)
-    skill_chance = db.EmbeddedDocumentField(ThiefChance)
+    thief_tbl = db.EmbeddedDocumentListField(ThiefChance, null=True)
+    cur_thief_skills = db.DictField(null=True)
 
     created_at = db.DateTimeField(default=datetime.utcnow)
     public = db.BooleanField(default=True)
     owner = db.ReferenceField('Player', unique_with="name")
-
-    def thief_chance(self):
-        Thief = Class.objects.get(name="thief")
-        self.skill_chance = Thief.skills["1"]
-        race_adj = Thief.race_adj[self.race]
-        for key in self.skill_chance:
-            self.skill_chance[key] += race_adj[key]
-
-    def link_player(self, player):
-        self.owner = player
-        self.save()
-        player.add_character(self.id)
-
-    def set_init_abilities(self):
-        race_abls = Race.objects.get(id=self.raceref.id).abilities
-        clss_abls = Class.objects.get(id=self.classref.id).abilities
-        self.abilities = race_abls + clss_abls
-
-    def add_initial_spells(self, classname):
-        self.available_spells = list(Spell.objects.filter(classname=classname, level=1))
-        print(self.available_spells)
-
-    def clean(self):
-        # self.cur_stats = self.base_stats
-        # self.set_init_abilities()
-        # self.class_ = Class.objects.get(name=self.class_).id
-        # self.race = Race.objects.get(race=self.race).id
-        pass
 
     def __repr__(self):
         string = ""

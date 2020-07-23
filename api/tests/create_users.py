@@ -14,15 +14,11 @@ def create_users():
     }
 
     payload = json.dumps(test_user)
-    print(payload)
 
     r = requests.post(api_url, data=payload, headers=headers)
-    print(r.status_code)
     if r.status_code not in range(200, 300):
-        print(r.text)
+        print(r.status_code, r.text)
         return False
-    else:
-        print(r.json())
 
     test_user2 = {
         "username": "pellowprincess",
@@ -34,10 +30,7 @@ def create_users():
     payload = json.dumps(test_user2)
 
     r = requests.post(api_url, data=payload, headers=headers)
-    print(r.status_code)
     if r.status_code not in range(200, 300):
-        print(r.text)
+        print(r.status_code, r.text)
         return False
-    else:
-        print(r.json())
     return True

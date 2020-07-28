@@ -1,9 +1,10 @@
 from flask import request, Response
 from flask_restx import Resource, abort
-from flask_jwt_extended import jwt_required, get_jwt_claims, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity  # , get_jwt_claims
 
-import json
-from ...core.auth import admin_required
+# import json
+# from ...core.auth import admin_required
+from ...database.char_mgmt import update_character
 from ...database.models import Character, Player, Race, Class, Inventory
 from ...database.char_create import create_character
 from bson import ObjectId
@@ -58,11 +59,14 @@ class UpdateCharacter(Resource):
             return Response("Unauthorized User", 403)
 
         try:
-            if character.update(**api.payload):
+            # update = Character.objects.get(id=char_id).modify(__raw__={"$set": dict(**api.payload)}, full_response=True)
+            update = update_character(character, api.payload)
+            print(update)
+            return update
+            if update:
                 return Response("Updated Successfully", 200)
         except Exception as e:
             return Response(f"{e}", 500)
-
 
 
 @ns.route("/create")

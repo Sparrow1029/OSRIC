@@ -11,33 +11,59 @@ class Stats(db.EmbeddedDocument):
     wis = db.IntField(min_value=3, max_value=19)
     cha = db.IntField(min_value=3, max_value=19)
 
+    def __repr__(self):
+        for stat in self._fields:
+            print(f"{stat.upper()}: {getattr(self, stat)}")
+
 
 class InventoryItem(db.EmbeddedDocument):
-    ref = db.LazyReferenceField(Item)
-    amount = db.IntField()
+    info = db.ReferenceField(Item)
+    count = db.FloatField()
 
 
 class InventoryWeapon(db.EmbeddedDocument):
-    ref = db.LazyReferenceField(Weapon)
-    amount = db.IntField()
+    info = db.ReferenceField(Weapon)
+    count = db.IntField()
 
 
 class InventoryArmor(db.EmbeddedDocument):
-    ref = db.LazyReferenceField(Armor)
-    amount = db.IntField()
+    info = db.ReferenceField(Armor)
+    count = db.IntField()
 
 
 class Inventory(db.EmbeddedDocument):
     gold = db.FloatField(default=100.0)
-    armor = db.ListField(InventoryArmor, default=[])
-    weapons = db.ListField(InventoryWeapon, default=[])
-    items = db.ListField(InventoryItem, default=[])
+    armor = db.EmbeddedDocumentListField(InventoryArmor, default=[])
+    weapons = db.EmbeddedDocumentListField(InventoryWeapon, default=[])
+    items = db.EmbeddedDocumentListField(InventoryItem, default=[])
+
+
+class EquippedWeapons(db.EmbeddedDocument):
+    main = db.ReferenceField(Weapon)
+    secondary = db.ReferenceField(Weapon)
+    missile = db.ReferenceField(Weapon)
+    other1 = db.ReferenceField(Weapon)
+    other2 = db.ReferenceField(Weapon)
+
+
+class EquippedArmor(db.EmbeddedDocument):
+    armor = db.ReferenceField(Armor)
+    shield = db.ReferenceField(Armor)
+    hands = db.ListField(db.ReferenceField(Armor))
+    other = db.ListField(db.ReferenceField(Armor))
+
+
+class EquippedItems(db.EmbeddedDocument):
+    feet = db.ReferenceField(Item)
+    clothes = db.ListField(db.ReferenceField(Item))
+    cape = db.ReferenceField(Item)
+    other = db.ListField(db.ReferenceField(Item))
 
 
 class Equipment(db.EmbeddedDocument):
-    armor = db.EmbeddedDocumentListField(InventoryArmor)
-    items = db.EmbeddedDocumentListField(InventoryItem)
-    weapons = db.EmbeddedDocumentListField(InventoryWeapon)
+    weapons = db.EmbeddedDocumentField(EquippedWeapons)
+    armor = db.EmbeddedDocumentField(EquippedArmor)
+    items = db.EmbeddedDocumentField(EquippedItems)
 
 
 class ThiefChance(db.EmbeddedDocument):

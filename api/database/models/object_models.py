@@ -30,7 +30,7 @@ class Weapon(db.Document):
 class Armor(db.Document):
     meta = {"collection": "armor"}
     name = db.StringField(required=True)
-    encumbrance = db.IntField()
+    encumbrance = db.FloatField()
     max_move = db.IntField()
     ac = db.IntField()
     cost = db.FloatField()

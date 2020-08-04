@@ -35,11 +35,33 @@ character_input = api.model("CharacterInput", {
     "gender": fields.String
 })
 
-equipment = api.model("Equipment", {
-    "armor": fields.List(fields.Nested(armor)),
-    "weapons": fields.List(fields.Nested(weapon)),
-    "items": fields.List(fields.Nested(item))
+equipped_weapons = api.model("EquippedWeapons", {
+    "main": fields.Nested(weapon),
+    "secondary": fields.Nested(weapon),
+    "missile": fields.Nested(weapon),
+    "other1": fields.Nested(weapon),
+    "other2": fields.Nested(weapon)
 })
+
+equipped_armor = api.model("EquippedArmor", {
+    "armor": fields.Nested(armor),
+    "shield": fields.Nested(armor),
+    "hands": fields.List(fields.Nested(armor)),
+    "other": fields.List(fields.Nested(armor))
+})
+
+equipped_items = api.model("EquippedItems", {
+    "feet": fields.Nested(item),
+    "clothes": fields.List(fields.Nested(item)),
+    "cape": fields.Nested(item),
+    "other": fields.List(fields.Nested(item))
+})
+
+equipment = api.model("Equipment", {
+    "weapons": fields.Nested(equipped_weapons),
+    "items": fields.Nested(equipped_items),
+    "armor": fields.Nested(equipped_items),
+}, skip_none=True)
 
 memorized_spell = api.clone("MemSpells", spell, {
     "num_remaining": fields.Integer
@@ -71,7 +93,7 @@ character = api.model("Character", {
     "alive": fields.Boolean,
     "status_effects": fields.Raw,
     "inventory": fields.Nested(inventory),
-    "equipped": fields.Nested(equipment),
+    "equipped": fields.Nested(equipment, skip_none=True),
     "available_spells": fields.List(fields.Nested(spell, skip_none=True)),
     "cur_spells": fields.List(fields.Nested(memorized_spell, skip_none=True)),
     "skill_chance": fields.Raw,
@@ -79,4 +101,11 @@ character = api.model("Character", {
     "created_at": fields.DateTime,
     "public": fields.Boolean(description="Is this character visible to all users"),
     "owner": fields.Nested(player_ref, skip_none=True)
+})
+
+character_update = api.model("CharacterUpdate", {
+    "cur_stats": fields.Nested(stats),
+    "status_effects": fields.List(fields.String),
+    "inventory": fields.Raw,
+    "equipped": fields.Raw,
 })

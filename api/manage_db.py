@@ -232,32 +232,41 @@ def link_spells():
             class_obj.save()
 
 
-def insert_items():
-    for csv_file in os.listdir(item_dir):
+def insert_weapons():
+    for csv_file in ["weapons.csv", "missile_weapons.csv"]:
         fpath = os.path.join(item_dir, csv_file)
         reader = DictReader(open(fpath))
         headers = reader.fieldnames
-        if headers[0] == "weapon":
-            headers[0] = "name"
-            for row in reader:
-                attrs = {header: row[header].lower() for header in headers}
-                json_str = json.dumps(attrs)
-                weapon_doc = Weapon.from_json(json_str)
-                weapon_doc.save()
-        elif headers[0] == "item":
-            headers[0] = "name"
-            for row in reader:
-                attrs = {header: row[header].lower() for header in headers}
-                json_str = json.dumps(attrs)
-                item_doc = Item.from_json(json_str)
-                item_doc.save()
-        elif headers[0] == "type":
-            headers[0] = "name"
-            for row in reader:
-                attrs = {header: row[header].lower() for header in headers}
-                json_str = json.dumps(attrs)
-                armor_doc = Armor.from_json(json_str)
-                armor_doc.save()
+        for row in reader:
+            attrs = {header: row[header].lower() for header in headers}
+            json_str = json.dumps(attrs)
+            weapon_doc = Weapon.from_json(json_str)
+            weapon_doc.save()
+
+
+def insert_armor():
+    fpath = os.path.join(item_dir, "armor.csv")
+    reader = DictReader(open(fpath))
+    headers = reader.fieldnames
+    for row in reader:
+        attrs = {header: row[header].lower() for header in headers}
+        json_str = json.dumps(attrs)
+        armor_doc = Armor.from_json(json_str)
+        armor_doc.save()
+
+
+
+def insert_items():
+    fpath = os.path.join(item_dir, "items.csv")
+    with open(fpath, 'r') as f:
+        reader = DictReader(f)
+        headers = reader.fieldnames
+        for row in reader:
+            attrs = {header: row[header].lower() for header in headers}
+            json_str = json.dumps(attrs)
+            item_doc = Item.from_json(json_str)
+            item_doc.save()
+
 
 def insert_lvl_advancement():
     adv_dict = {
@@ -293,6 +302,8 @@ if __name__ == "__main__":
             create_races()
             link_spells()
             insert_items()
+            insert_weapons()
+            insert_armor()
             if len(sys.argv) == 3:
                 if sys.argv[2] == "all":
                     create_users()

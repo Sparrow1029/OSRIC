@@ -2,7 +2,6 @@
 from flask import request
 from flask_restx import Resource, abort
 from bson import ObjectId
-from flask_jwt_extended import jwt_required, get_jwt_claims
 from ...core.auth import admin_required
 
 from ...database.models import Class
@@ -16,9 +15,10 @@ ns = api.namespace("classes", description="Database classes operations")
 class ClassesApi(Resource):
     @api.marshal_list_with(class_)
     def get(self):
-        print(get_jwt_claims())
-        return list(Class.objects())
-        abort(500, "Something went horribly wrong.")
+        try:
+            return list(Class.objects())
+        except Exception:
+            abort(500, "Something went horribly wrong.")
 
     @admin_required
     @api.param("Authorization", description="Bearer Token", _in="header", required=True)

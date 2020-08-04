@@ -1,5 +1,4 @@
 import requests
-import time
 from pprint import pprint
 
 from login import get_jwt

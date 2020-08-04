@@ -1,4 +1,4 @@
-weapon,dmg_sm_md,dmg_lg,encumbrance,cost,category
+name,dmg_sm_md,dmg_lg,encumbrance,cost,category
 arrows,1d6,1d6,0.3333333333,0.1666666667,melee
 "axe, battle",1d8,1d8,7,5,melee
 "axe, hand",1d6,1d4,5,1,melee

@@ -1,5 +1,5 @@
 from flask_restx import fields
-from .fields import MongoId
+from .fields import MongoId  # , BsonObjectId
 
 from ..routes import dnd_api as api
 
@@ -15,9 +15,9 @@ item = api.clone("Item", item_input, {
     "id": MongoId
 })
 
-item_inventory = api.clone("ItemInventory", item_input, {
-    "id": MongoId,
-    "amount": fields.Integer
+item_inventory = api.model("ItemInventory", {
+    "info": fields.Nested(item),
+    "count": fields.Integer
 })
 
 armor_input = api.model("ArmorInput", {
@@ -34,9 +34,9 @@ armor = api.clone("Armor", armor_input, {
     "id": MongoId
 })
 
-armor_inventory = api.clone("ArmorInventory", armor_input, {
-    "id": MongoId,
-    "amount": fields.Integer
+armor_inventory = api.model("ArmorInventory", {
+    "info": fields.Nested(armor),
+    "count": fields.Integer
 })
 
 weapon_input = api.model("WeaponInput", {
@@ -58,7 +58,7 @@ weapon = api.clone("Weapon", weapon_input, {
 })
 
 
-weapon_inventory = api.clone("WeaponInventory", weapon_input, {
-    "id": MongoId,
-    "amount": fields.Integer
+weapon_inventory = api.model("WeaponInventory", {
+    "info": fields.Nested(weapon),
+    "count": fields.Integer
 })

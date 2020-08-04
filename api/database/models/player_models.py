@@ -22,7 +22,7 @@ class Character(db.Document):
     max_hp = db.IntField()
     exp = db.IntField(default=0)
     alive = db.BooleanField(default=True)
-    status_effects = db.DictField()
+    status_effects = db.ListField(db.StringField)
     inventory = db.EmbeddedDocumentField(Inventory, null=False, default=Inventory())
     equipped = db.EmbeddedDocumentField(Equipment)
     available_spells = db.ListField(db.ReferenceField(Spell))

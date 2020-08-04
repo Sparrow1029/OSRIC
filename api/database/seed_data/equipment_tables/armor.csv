@@ -1,4 +1,4 @@
-type,encumbrance,max_move,ac,cost
+name,encumbrance,max_move,ac,cost
 banded,35,90,-6,90
 mail hauberk or byrnie (chain),30,90,-5,75
 "mail, elfin (chain)",15,120,-5,9999999

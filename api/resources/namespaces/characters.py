@@ -1,15 +1,12 @@
 from flask import request, Response
 from flask_restx import Resource, abort
-from flask_jwt_extended import jwt_required, get_jwt_identity  # , get_jwt_claims
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
-# import json
-# from ...core.auth import admin_required
-from ...database.char_mgmt import update_character
-from ...database.models import Character, Player, Race, Class, Inventory
+from ...database.models import Character, Player
 from ...database.char_create import create_character
 from bson import ObjectId
 from ..routes import dnd_api as api
-from ..api_models import character_input, character
+from ..api_models import character_input, character, character_update
 
 ns = api.namespace("character", description="DnD Database - Characters")
 
@@ -45,7 +42,7 @@ class UpdateCharacter(Resource):
     @jwt_required
     @api.param("char_id", description="Character MongoId", required=True)
     @api.param("Authorization", description="Bearer <JWT>", _in="header", required=True)
-    @api.expect(character)
+    @api.expect(character_update)
     def patch(self):
         char_id = request.args.get("char_id")
         if not char_id:
@@ -59,14 +56,11 @@ class UpdateCharacter(Resource):
             return Response("Unauthorized User", 403)
 
         try:
-            # update = Character.objects.get(id=char_id).modify(__raw__={"$set": dict(**api.payload)}, full_response=True)
-            update = update_character(character, api.payload)
-            print(update)
-            return update
+            update = character.modify(**api.payload)
             if update:
                 return Response("Updated Successfully", 200)
         except Exception as e:
-            return Response(f"{e}", 500)
+            return Response(f"{e.__class__.__name__}: {e}", 500)
 
 
 @ns.route("/create")

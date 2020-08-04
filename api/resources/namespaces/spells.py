@@ -15,8 +15,10 @@ class SpellsApi(Resource):
     @api.doc("list_spells")
     @api.marshal_list_with(spell, skip_none=True)
     def get(self):
-        return list(Spell.objects())
-        abort(500, "Something went horribly wrong.")
+        try:
+            return list(Spell.objects())
+        except Exception as e:
+            abort(500, f"{e.__class__.__name__}: {e}")
 
 
 @ns.route("/<string:id>")
@@ -60,8 +62,10 @@ class SpellApi(Resource):
     @api.param("Authorization", description="Bearer <JWT>", _in="header", required=True)
     @api.doc(responses={201: "Spell successfully created", 403: "Admins Only"})
     def post(self):
-        spell = Spell(**api.payload).save()
-        class_to_update = Class.objects.get(name=api.payload["classname"])
-        class_to_update.modify(push__spells=spell.id)
-        return {"id": str(spell.id)}, 201
-        abort(500, "crap it all went sideways")
+        try:
+            spell = Spell(**api.payload).save()
+            class_to_update = Class.objects.get(name=api.payload["classname"])
+            class_to_update.modify(push__spells=spell.id)
+            return {"id": str(spell.id)}, 201
+        except Exception as e:
+            abort(500, f"{e.__class__.__name__}: {e}")

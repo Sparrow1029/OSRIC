@@ -5,8 +5,7 @@ from .spells import spell
 from .fields import MongoId
 
 restrictions = api.model("Restrictions", {
-    "min_str": fields.Integer,
-    "min_dex": fields.Integer,
+    "min_str": fields.Integer, "min_dex": fields.Integer,
     "min_con": fields.Integer,
     "min_int": fields.Integer,
     "min_wis": fields.Integer,
@@ -45,9 +44,25 @@ thief_chance = api.model("ThiefChance", {
     "read_languages": fields.Float,
 })
 
+race_input = api.model("RaceInput", {
+    "name": fields.String,
+    "base_stat_mods": fields.Raw,
+    "abilities": fields.Nested(ability),
+    "bonuses": fields.List(fields.String),
+    "languages": fields.List(fields.String),
+    "max_addl_languages": fields.Integer,
+    "permitted_classes": fields.List(fields.String),
+    "starting_age": fields.Raw,
+    "score_limits": fields.Raw,
+    "movement_rate": fields.Integer
+})
+
+race = api.clone("Race", race_input, {
+    "id": MongoId
+})
 
 class_input = api.model("ClassInput", {
-    "classname": fields.String,
+    "name": fields.String,
     "restrictions": fields.Nested(restrictions),
     "abilities": fields.List(fields.Nested(ability)),
     "saving_throws": fields.Raw,

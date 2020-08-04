@@ -7,31 +7,35 @@ class Item(db.Document):
     name = db.StringField(required=True)
     weight = db.FloatField()
     cost = db.FloatField()
-    special = db.StringField()
+    description = db.StringField()
+    magic = db.BooleanField(default=False)
 
 
 class Weapon(db.Document):
     meta = {"collection": "weapons"}
     name = db.StringField(required=True)
-    category = db.StringField(required=True)  # missile or melee or magic?
+    category = db.StringField(required=True, unique_with="name")
     dmg_sm_md = db.StringField()
     dmg_lg = db.StringField()
     encumbrance = db.FloatField()
     cost = db.FloatField()
-    magic = db.StringField()
+    magic = db.BooleanField(default=False)
+    description = db.StringField()
 
     # missile weapons only
     rate_of_fire = db.FloatField(null=True)
-    rng = db.IntField(null=True)
+    rng = db.IntField(null=True, db_field="range")  # range is keyword
 
 
 class Armor(db.Document):
     meta = {"collection": "armor"}
-    material = db.StringField()
-    encumbrance = db.IntField()
+    name = db.StringField(required=True)
+    encumbrance = db.FloatField()
     max_move = db.IntField()
     ac = db.IntField()
     cost = db.FloatField()
+    magic = db.BooleanField(default=False)
+    description = db.StringField()
 
 
 class Ability(db.EmbeddedDocument):
@@ -41,8 +45,13 @@ class Ability(db.EmbeddedDocument):
 
 
 class Spell(db.Document):
-    meta = {"collection": "spells"}
-    classname = db.StringField()
+    meta = {
+        "collection": "spells",
+        "indexes": [
+            {"fields": ("classname", "spellname", "level"), "unique": True}
+        ]
+    }
+    classname = db.StringField(required=True)
     spellname = db.StringField(required=True)
     level = db.IntField()
     range = db.StringField()
@@ -56,7 +65,8 @@ class Spell(db.Document):
 
 
 class Note(db.EmbeddedDocument):
-    # date = db.DateTimeField(default=datetime.utcnow)
+    last_edited = db.DateTimeField(default=datetime.utcnow)
+    editor = db.ReferenceField('Player')
     author = db.ReferenceField('Player')
     title = db.StringField(max_length=32)
     content = db.StringField(required=True)
@@ -64,7 +74,8 @@ class Note(db.EmbeddedDocument):
 
 class Session(db.EmbeddedDocument):
     date = db.DateTimeField(default=datetime.utcnow)
-    notes = db.ListField(db.ObjectIdField())  # Note IDs
+    loot = db.EmbeddedDocumentField('Inventory')
+    notes = db.EmbeddedDocumentListField(Note)
     npcs = db.ListField(db.ObjectIdField())
     monsters = db.ListField(db.ObjectIdField())
 
@@ -73,5 +84,4 @@ class Campaign(db.EmbeddedDocument):
     title = db.StringField(required=True)
     dungeon_master = db.ReferenceField('Player')
     players = db.ListField(db.ReferenceField('Player'))
-    # players = db.ListField(db.ReferenceField(Player))
     sessions = db.EmbeddedDocumentListField(Session)

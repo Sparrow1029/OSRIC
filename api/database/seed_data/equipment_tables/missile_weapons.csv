@@ -1,0 +1,14 @@
+name,dmg_sm_md,dmg_lg,rate_of_fire,category,rng,encumbrance,cost,description
+"axe, hand",1d6,1d4,1,missile,10,5,1,
+"bow, long",1d6,1d6,2,missile,70,12,60,
+"bow, short",1d6,1d6,2,missile,50,8,15,
+club,1d4,1d3,1,missile,10,3,0.02,
+"composite bow, long",1d6,1d6,2,missile,60,13,100,
+"composite bow, short",1d6,1d6,2,missile,50,9,75,
+"crossbow, heavy",1d6+1,1d6+1,0.5,missile,60,12,20,"Heavy crossbows may not be used from horseback; only a footman can brace them correctly before firing."
+"crossbow, light",1d4+1,1d4+1,1,missile,60,4,12,
+dart,1d3,1d2,3,missile,15,0.5,0.2,
+hammer,1d4+1,1d4,1,missile,10,5,1,
+javelin,1d6,1d4,1,missile,20,2,0.5,
+sling,1d4+1 or 1d4,1d6+1 or 1d4,1,missile,35,0.5,5,
+spear,1d6,1d8,1,missile,15,5,1,

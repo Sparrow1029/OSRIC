@@ -1,5 +1,4 @@
 from functools import wraps
-from ..database.models import Player
 from flask_jwt_extended import (
     JWTManager, verify_jwt_in_request, get_jwt_claims
 )
@@ -21,6 +20,7 @@ def admin_required(fn):
 
 @jwt.user_claims_loader
 def add_claims_to_access_token(identity):
+    from ..database.models import Player
     claims = {"roles": []}  # , "chars": [], "dm": []}
     player = Player.objects.get(id=identity)
     if player.admin:

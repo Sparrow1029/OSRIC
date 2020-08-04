@@ -53,5 +53,10 @@ class LoginApi(Resource):
             # return {"error": "Invalid username/email password combination"}, 401
 
         expires = datetime.timedelta(days=7)
-        access_token = create_access_token(str(player.id), expires_delta=expires)
+        fresh = datetime.timedelta(minutes=30)
+        access_token = create_access_token(
+            str(player.id),
+            expires_delta=expires,
+            fresh=fresh
+        )
         return {"token": access_token}, 200

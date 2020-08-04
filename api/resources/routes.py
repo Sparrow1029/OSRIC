@@ -5,7 +5,13 @@ from mongoengine.errors import DoesNotExist
 # from .player import PlayersApi, PlayerApi
 # from .auth import SignupApi, LoginApi
 
-dnd_api = Api(default="dndb", default_label="DnD Database API")
+dnd_api = Api(
+    title="D&D Database API",
+    version="1.0",
+    default="dndb",
+    # ordered=True,
+    prefix="/api"
+)
 
 
 @dnd_api.errorhandler(DoesNotExist)
@@ -15,7 +21,8 @@ def handle_does_not_exist(error):
 
 def initialize_routes(api):
     from .namespaces import (
-        ClassesApi, ClassApi, SpellsApi, SpellApi, SignupApi, LoginApi
+        ClassesApi, ClassApi, SpellsApi, SpellApi, SignupApi, LoginApi, CharactersApi,
+        CreateCharacter, DeleteCharacter, UpdateCharacter
     )
     api.add_resource(SpellsApi)
     api.add_resource(SpellApi)
@@ -23,3 +30,7 @@ def initialize_routes(api):
     api.add_resource(ClassApi)
     api.add_resource(SignupApi)
     api.add_resource(LoginApi)
+    api.add_resource(CharactersApi)
+    api.add_resource(CreateCharacter)
+    api.add_resource(DeleteCharacter)
+    api.add_resource(UpdateCharacter)

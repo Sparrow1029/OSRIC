@@ -1,27 +1,34 @@
-import os, re
+import os, re, sys
 from csv import DictReader
 from collections import defaultdict
+import json
 
+from mongoengine import connect
+from mongoengine.connection import _get_db
+
+from tests import create_characters, create_users, get_jwt
 from database import db
 from database.models import (
-    Class, Race, ClassRestrictions, Ability, Spell,  # LevelAdvancement, SpellsByLevel,
-    # Item, Weapon, Armor
+    Class, Race, ClassRestrictions, Ability, Spell, LevelAdvancement, SpellsByLevel,
+    Item, Weapon, Armor, ThiefChance
 )
 from database.seed_data import (
-    RESTRICTIONS_DICT, SAVING_THROWS_DICT, TO_HIT_DICT,
+    RESTRICTIONS_DICT, SAVING_THROWS_DICT, TO_HIT_DICT, THIEF_DEX_ADJ, THIEF_RACE_ADJ,
     HUMAN, HALFLING, HALF_ELF, HALF_ORC, ELF, GNOME, DWARF
 )
-
-db.connect("dnd_database", host="127.0.0.1", port=27017)
 
 classnames = ["druid", "thief", "ranger", "cleric", "fighter", "paladin", "assassin", "magic_user",
               "illusionist"]
 races = [HUMAN, HALFLING, HALF_ELF, HALF_ORC, ELF, GNOME, DWARF]
 
-working_dir = os.path.dirname(os.path.abspath(__file__))
-abilities_file = os.path.join(working_dir, "database/seed_data/all_spells.csv")
-spell_file = os.path.join(working_dir, "database/seed_data/all_spells.csv")
+data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "database/seed_data/")
+abilities_file = os.path.join(data_dir, "class_abilities.csv")
+spell_file = os.path.join(data_dir, "all_spells.csv")
+item_dir = os.path.join(data_dir, "equipment_tables")
+lvl_adv_file = os.path.join(data_dir, "level_advancemnt")
+thief_chance_file = os.path.join(data_dir, "thief_chance.csv")
 
+db.connect("dnd_database", host="127.0.0.1", port=27017)
 
 class EmbeddedTable:
     def __init__(self, text):
@@ -138,11 +145,22 @@ def parse_class_abilities(csv_file):
 
     return abilities_dict
 
+def parse_thief_chance(csv_file):
+    dicts = []
+    with open(csv_file, 'r') as f:
+        reader = DictReader(f)
+        for row in reader:
+            dicts.append({header: row[header] for header in reader.fieldnames})
+    chance_list = [
+        ThiefChance.from_json(json.dumps(d))
+        for d in dicts
+    ]
+    return chance_list
 
 def create_classes():
     abilities = parse_class_abilities(abilities_file)
-    for classname in classnames:
-        r = RESTRICTIONS_DICT[classname]
+    for name in classnames:
+        r = RESTRICTIONS_DICT[name]
         restrictions = ClassRestrictions(
             min_str=r["min_str"],
             min_dex=r["min_dex"],
@@ -159,14 +177,24 @@ def create_classes():
         )
         class_abilities = [
             Ability(name=a["ability"], level=a["level"], description=a["description"])
-            for a in abilities[classname]
+            for a in abilities[name]
         ]
+        thief_chance = None
+        dex_adj = None
+        if name == "thief":
+            thief_chance = parse_thief_chance(thief_chance_file)
+            dex_adj = [
+                ThiefChance.from_json(json.dumps(d))
+                for d in THIEF_DEX_ADJ
+            ]
         db_class_obj = Class(
-            classname=classname,
+            name=name,
             restrictions=restrictions,
             abilities=class_abilities,
-            saving_throws=SAVING_THROWS_DICT[classname],
-            to_hit=TO_HIT_DICT[classname],
+            saving_throws=SAVING_THROWS_DICT[name],
+            to_hit=TO_HIT_DICT[name],
+            thief_skill_chance=thief_chance,
+            thief_dex_adj=dex_adj
         )
         db_class_obj.save()
 
@@ -174,9 +202,10 @@ def create_classes():
 def create_races():
     for race in races:
         if race["abilities"]:
-            race_abilities = [Ability(name=k, description=v) for k, v in race["abilities"].items()]
+            race_abilities = [Ability(name=k, description=v, level=1) for k, v in race["abilities"].items()]
         else:
             race_abilities = []
+        thief_adj = THIEF_RACE_ADJ[race["name"]]
         db_race_obj = Race(
             name=race["name"],
             base_stat_mods=race["base_stat_mods"],
@@ -188,6 +217,7 @@ def create_races():
             starting_age=race["starting_age"],
             score_limits=race["score_limits"],
             movement_rate=race["movement_rate"],
+            thief_skill_adj=thief_adj,
         )
 
         db_race_obj.save()
@@ -197,14 +227,96 @@ def link_spells():
     for classname in classnames:
         spell_objs = Spell.objects.filter(classname=classname)
         if spell_objs:
-            class_obj = Class.objects.get(classname=classname)
+            class_obj = Class.objects.get(name=classname)
             class_obj.spells.extend([spell.id for spell in spell_objs])
             class_obj.save()
 
 
+def insert_weapons():
+    for csv_file in ["weapons.csv", "missile_weapons.csv"]:
+        fpath = os.path.join(item_dir, csv_file)
+        reader = DictReader(open(fpath))
+        headers = reader.fieldnames
+        for row in reader:
+            attrs = {header: row[header].lower() for header in headers}
+            json_str = json.dumps(attrs)
+            weapon_doc = Weapon.from_json(json_str)
+            weapon_doc.save()
+
+
+def insert_armor():
+    fpath = os.path.join(item_dir, "armor.csv")
+    reader = DictReader(open(fpath))
+    headers = reader.fieldnames
+    for row in reader:
+        attrs = {header: row[header].lower() for header in headers}
+        json_str = json.dumps(attrs)
+        armor_doc = Armor.from_json(json_str)
+        armor_doc.save()
+
+
+
+def insert_items():
+    fpath = os.path.join(item_dir, "items.csv")
+    with open(fpath, 'r') as f:
+        reader = DictReader(f)
+        headers = reader.fieldnames
+        for row in reader:
+            attrs = {header: row[header].lower() for header in headers}
+            json_str = json.dumps(attrs)
+            item_doc = Item.from_json(json_str)
+            item_doc.save()
+
+
+def insert_lvl_advancement():
+    adv_dict = {
+        "paladin": defaultdict(defaultdict),
+        "ranger": defaultdict(defaultdict),
+        "cleric": defaultdict(defaultdict),
+    }
+
+    with open(lvl_adv_file, 'r') as f:
+        pass
+
+
+
 if __name__ == "__main__":
-    pass
-    parse_spells(spell_file)
-    create_classes()
-    create_races()
-    link_spells()
+    usage = """\
+    usage:
+        python3 manage_db.py [option] [sub-options]
+            seed - create db and insert data from database/seed_data dir
+            # 'seed' sub-options:
+                  all - create characters & players
+                  chars - create characters
+                  players - create players
+
+            get_jwt [username] [password] - get JWT for Swagger API
+
+            drop - drop 'dnd_database'"""
+    if len(sys.argv) == 1:
+        print(usage)
+    elif len(sys.argv) > 1:
+        if sys.argv[1] == "seed":
+            parse_spells(spell_file)
+            create_classes()
+            create_races()
+            link_spells()
+            insert_items()
+            insert_weapons()
+            insert_armor()
+            if len(sys.argv) == 3:
+                if sys.argv[2] == "all":
+                    create_users()
+                    create_characters()
+                elif sys.argv[2] == "players":
+                    create_users()
+                elif sys.argv[2] == "chars":
+                    create_characters()
+        elif sys.argv[1] == "drop":
+            db.get_connection().drop_database('dnd_database')
+        elif sys.argv[1] == "get_jwt":
+            if not len(sys.argv) == 4:
+                print(usage)
+            print(get_jwt(sys.argv[2], sys.argv[3]))
+    else:
+        print(usage)

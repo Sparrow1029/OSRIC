@@ -1,6 +1,5 @@
 import os
 import csv
-from pprint import pprint
 from collections import defaultdict
 from pymongo import MongoClient
 
@@ -40,9 +39,6 @@ for name in equipment_files:
                 except ValueError:
                     pass
             document = dict(zip(headers, row))
-            # pprint(dict(zip(headers, row)))
-            # d_id = db[name].insert_one(document).inserted_id
-            # pprint(d_id)
 
 class_document = defaultdict()
 db = client.classes
@@ -79,8 +75,6 @@ for csv_file in class_files:
                 for i in range(-3, -7, -1):
                     row[i] = row[i].split()
                 class_document[class_name][embedded_name] = dict(zip(headers, row[1:]))
-
-# pprint(class_document)
 
 
 for i in class_document:

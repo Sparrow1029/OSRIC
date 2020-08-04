@@ -26,7 +26,7 @@ $ pip install -r requirements.txt
 3. Seed the database:
 ```bash
 $ cd api/
-$ python manage.py
+$ python manage.py seed all
 ```
 4. create a `.env` file in the `api/` directory with the contents: `JWT_SECRET_KEY="some-super-secret-key"`
 5. export some other flask shell variables:

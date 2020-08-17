@@ -16,6 +16,39 @@ class Stats(db.EmbeddedDocument):
             print(f"{stat.upper()}: {getattr(self, stat)}")
 
 
+class StrMods(db.EmbeddedDocument):
+    hit_bonus = db.IntField()
+    dmg_bonus = db.IntField()
+    encumb_adj = db.IntField()
+    minor_tests = db.StringField()
+    major_tests = db.StringField()
+
+
+class DexMods(db.EmbeddedDocument):
+    surprise = db.IntField()
+    to_hit = db.IntField()
+    ac = db.IntField()
+
+
+class ConMods(db.EmbeddedDocument):
+    hit_per_die = db.IntField()
+    survive_dead = db.IntField()
+    survive_sys_shock = db.IntField()
+
+
+class ChaMods(db.EmbeddedDocument):
+    max_henchmen = db.IntField()
+    loyalty_bonus = db.IntField()
+    reaction_bonus = db.IntField()
+
+
+class BaseMods(db.EmbeddedDocument):
+    str_mods = db.EmbeddedDocumentField(StrMods)
+    dex_mods = db.EmbeddedDocumentField(DexMods)
+    con_mods = db.EmbeddedDocumentField(ConMods)
+    cha_mods = db.EmbeddedDocumentField(ChaMods)
+
+
 class InventoryItem(db.EmbeddedDocument):
     info = db.ReferenceField(Item)
     count = db.FloatField()

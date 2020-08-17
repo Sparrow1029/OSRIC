@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask_bcrypt import generate_password_hash, check_password_hash
-from .character_models import Stats, Inventory, Equipment, ThiefChance, MemSpell
+from .character_models import Stats, Inventory, Equipment, ThiefChance, MemSpell, BaseMods
 from .object_models import Spell, Ability
 from .class_models import Class, Race
 
@@ -13,6 +13,7 @@ class Character(db.Document):
     level = db.IntField(default=1, required=True)
     base_stats = db.EmbeddedDocumentField(Stats, required=True)
     cur_stats = db.EmbeddedDocumentField(Stats)
+    base_mods = db.EmbeddedDocumentField(BaseMods)
     classref = db.ReferenceField(Class)
     raceref = db.ReferenceField(Race)
     abilities = db.EmbeddedDocumentListField(Ability)
@@ -21,6 +22,7 @@ class Character(db.Document):
     cur_hp = db.IntField()
     max_hp = db.IntField()
     exp = db.IntField(default=0)
+    ac = db.IntField()
     alive = db.BooleanField(default=True)
     status_effects = db.ListField(db.StringField)
     inventory = db.EmbeddedDocumentField(Inventory, null=False, default=Inventory())

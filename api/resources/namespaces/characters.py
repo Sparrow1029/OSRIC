@@ -6,7 +6,8 @@ from ...database.models import Character, Player
 from ...database.char_create import create_character
 from bson import ObjectId
 from ..routes import dnd_api as api
-from ..api_models import character_input, character, character_update
+# from ..api_models import character_input, character, character_update
+from ..api_models import ClassSchema, RaceSchema, SpellSchema
 
 ns = api.namespace("character", description="DnD Database - Characters")
 
@@ -15,10 +16,10 @@ ns = api.namespace("character", description="DnD Database - Characters")
 class CharactersApi(Resource):
     @jwt_required
     @api.doc(responses={500: "Something went wrong", 200: "Success"})
-    @api.param("char_id", description="Character MongoId")
-    @api.param("player_id", description="Player MongoId")
-    @api.param("Authorization", description="Bearer <JWT>", _in="header", required=True)
-    @api.marshal_list_with(character, skip_none=True)
+    # @api.param("char_id", description="Character MongoId")
+    # @api.param("player_id", description="Player MongoId")
+    # @api.param("Authorization", description="Bearer <JWT>", _in="header", required=True)
+    # @api.marshal_list_with(character, skip_none=True)
     def get(self):
         player_id = request.args.get("player_id")
         if player_id:
